@@ -15,14 +15,15 @@ class User
   public gender!: string;
   public password!: string;
   public role!: string;
+  public token?: string;
 }
 
 User.init(
   {
     id: {
-      type: DataTypes.STRING(36),
-      autoIncrement: false,
+      type: DataTypes.STRING(10),
       primaryKey: true,
+      allowNull: false,
     },
     name: {
       type: DataTypes.STRING(100),
@@ -47,6 +48,11 @@ User.init(
     role: {
       type: DataTypes.STRING,
       defaultValue: "user",
+    },
+    token: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: true,
     },
   },
   {

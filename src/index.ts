@@ -4,6 +4,7 @@ import fs from "fs";
 import path from "path";
 import sequelize from "./config/db";
 import "./models";
+import routes from "./routes";
 
 const app = express();
 const PORT = Number(process.env.PORT) || 8000;
@@ -25,6 +26,8 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.get("/", (req, res) => {
   res.send("Hello from MyFOODIE + Sequelize + Swagger!");
 });
+
+app.use("/api", routes);
 
 // start the server and connect to the database
 const start = async () => {

@@ -5,4 +5,5 @@ export interface UserAttributes {
   gender: string;
   password: string;
   role: string;
+  token?: string;
 }
