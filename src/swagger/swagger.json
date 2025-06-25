@@ -7,17 +7,60 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8000"
+      "url": "http://localhost:8000/api"
     }
   ],
   "paths": {
-    "/": {
-      "get": {
-        "summary": "Root endpoint",
-        "responses": {
-          "200": {
-            "description": "Success"
+    "/auth/signup": {
+      "post": {
+        "summary": "User Signup",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "email": { "type": "string" },
+                  "password": { "type": "string" },
+                  "gender": {
+                    "type": "string",
+                    "enum": ["male", "female", "other"]
+                  }
+                },
+                "required": ["name", "email", "password", "gender"]
+              }
+            }
           }
+        },
+        "responses": {
+          "201": { "description": "Signup successful" },
+          "400": { "description": "Validation or duplicate error" }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "User Login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string" },
+                  "password": { "type": "string" }
+                },
+                "required": ["email", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Login successful, returns token" },
+          "401": { "description": "Invalid credentials" }
         }
       }
     }
