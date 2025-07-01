@@ -18,6 +18,7 @@ Supplyer.init(
   {
     id: {
       type: DataTypes.STRING(36),
+      allowNull: false,
       autoIncrement: false,
       primaryKey: true,
     },

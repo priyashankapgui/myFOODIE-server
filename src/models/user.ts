@@ -47,7 +47,7 @@ User.init(
     },
     role: {
       type: DataTypes.STRING,
-      defaultValue: "user",
+      allowNull: true,
     },
     token: {
       type: DataTypes.STRING,

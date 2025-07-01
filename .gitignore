@@ -52,6 +52,7 @@ build/Release
 .vscode/
 .idea/
 
+
 # Other tooling
 bower_components/
 lib-cov/
