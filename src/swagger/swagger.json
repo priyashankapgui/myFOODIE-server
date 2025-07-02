@@ -22,21 +22,47 @@
                 "type": "object",
                 "properties": {
                   "name": { "type": "string" },
-                  "email": { "type": "string" },
+                  "email": { "type": "string", "format": "email" },
                   "password": { "type": "string" },
                   "gender": {
                     "type": "string",
                     "enum": ["male", "female", "other"]
-                  }
+                  },
+                  "role": {
+                    "type": "string",
+                    "enum": ["management", "normalEmployee", "supplyer"]
+                  },
+                  "position": { "type": "string" },
+                  "departmentId": { "type": "integer" },
+                  "foodType": { "type": "string" },
+                  "address": { "type": "string" },
+                  "phone": { "type": "string" }
                 },
-                "required": ["name", "email", "password", "gender"]
+                "required": ["name", "email", "password", "gender", "role"]
+              },
+              "example": {
+                "name": "Alice Manager",
+                "email": "alice@myfoodie.com",
+                "password": "password123",
+                "gender": "female",
+                "role": "management",
+                "position": "Operations Head"
               }
             }
           }
         },
         "responses": {
-          "201": { "description": "Signup successful" },
-          "400": { "description": "Validation or duplicate error" }
+          "201": {
+            "description": "Signup successful",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/User" }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation or duplicate error"
+          }
         }
       }
     },
@@ -54,13 +80,58 @@
                   "password": { "type": "string" }
                 },
                 "required": ["email", "password"]
+              },
+              "example": {
+                "email": "alice@myfoodie.com",
+                "password": "password123"
               }
             }
           }
         },
         "responses": {
-          "200": { "description": "Login successful, returns token" },
-          "401": { "description": "Invalid credentials" }
+          "200": {
+            "description": "Login successful, returns token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": { "type": "string" },
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "summary": "User Logout",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "User ID to logout"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logout successful"
+          },
+          "404": {
+            "description": "User not found"
+          }
         }
       }
     }

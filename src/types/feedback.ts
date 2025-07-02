@@ -3,6 +3,5 @@ export interface FeedbackAttributes {
   userId: string;
   foodId: number;
   supplierId: string;
-  rating: number;
   comment?: string;
 }

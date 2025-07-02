@@ -4,7 +4,7 @@ import { validate } from "../middlewares/validate.middleware";
 import {
   createDepartmentSchema,
   updateDepartmentSchema,
-} from "../validation/department.sechema";
+} from "../validation/department.schema";
 import { authenticate } from "../middlewares/auth.middleware";
 
 const router = Router();

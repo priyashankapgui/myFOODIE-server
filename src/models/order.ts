@@ -8,11 +8,16 @@ class Order
   implements OrderAttributes
 {
   public id!: string;
-  public userId!: string;
-  public foodId!: number;
-  public quantity!: number;
+  public collectedByEmployeeId!: string;
+  public departmentId!: number;
   public orderDate!: Date;
+  public totalRequestOrderItems!: number;
+  public totalPreparedOrderItems!: number;
+  public totalOrderPrice!: number;
+  public totalOrderEmployeePrice!: number;
+  public totalOrderHospitalPrice!: number;
   public status!: string;
+  public mealType!: string;
 }
 Order.init(
   {
@@ -21,16 +26,8 @@ Order.init(
       autoIncrement: false,
       primaryKey: true,
     },
-    userId: {
+    collectedByEmployeeId: {
       type: DataTypes.STRING(36),
-      allowNull: false,
-    },
-    foodId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    quantity: {
-      type: DataTypes.INTEGER,
       allowNull: false,
     },
     orderDate: {
@@ -38,10 +35,49 @@ Order.init(
       allowNull: false,
       defaultValue: DataTypes.NOW,
     },
+    departmentId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    mealType: {
+      type: DataTypes.STRING(20),
+      allowNull: false,
+      validate: {
+        isIn: [["breakfast", "lunch", "dinner"]],
+      },
+    },
+    totalRequestOrderItems: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    totalPreparedOrderItems: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    totalOrderPrice: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      defaultValue: 0.0,
+    },
+    totalOrderEmployeePrice: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      defaultValue: 0.0,
+    },
+    totalOrderHospitalPrice: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      defaultValue: 0.0,
+    },
     status: {
       type: DataTypes.STRING(20),
       allowNull: false,
       defaultValue: "pending",
+      validate: {
+        isIn: [["pending", "prepared", "completed", "cancelled"]],
+      },
     },
   },
   {

@@ -8,6 +8,7 @@ class Supplyer
   extends Model<SupplyerAttributes, SupplyerCreationAttributes>
   implements SupplyerAttributes
 {
+  [x: string]: any;
   public id!: string;
   public userId!: string;
   public foodType!: string;
@@ -18,6 +19,7 @@ Supplyer.init(
   {
     id: {
       type: DataTypes.STRING(36),
+      allowNull: false,
       autoIncrement: false,
       primaryKey: true,
     },
@@ -27,8 +29,11 @@ Supplyer.init(
       unique: true,
     },
     foodType: {
-      type: DataTypes.STRING(100), //* This is the lunch , dinner, breakfast, etc.
+      type: DataTypes.STRING(36),
       allowNull: false,
+      validate: {
+        isIn: [["breakfast", "lunch", "dinner", "snacks", "beverages"]],
+      },
     },
     address: {
       type: DataTypes.STRING(255),
