@@ -1,6 +1,7 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/db";
 import { FoodItemAttributes } from "../types/foodItem";
+import { foodItemHooks } from "../hooks/foodItem.hooks";
 
 interface FoodItemCreationAttributes
   extends Optional<FoodItemAttributes, "id" | "imageUrl"> {}
@@ -13,6 +14,8 @@ class FoodItem
   public description?: string;
   public supplierId!: string;
   public price!: number;
+  public employeeprice!: number;
+  public hospitalprice!: number;
   public category!: string;
   public imageUrl?: string;
   public available!: boolean;
@@ -40,6 +43,14 @@ FoodItem.init(
       type: DataTypes.FLOAT,
       allowNull: false,
     },
+    employeeprice: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    hospitalprice: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
     category: {
       type: DataTypes.STRING(50),
       allowNull: false,
@@ -58,6 +69,7 @@ FoodItem.init(
     tableName: "food_items",
     modelName: "FoodItem",
     timestamps: true,
+    hooks: foodItemHooks,
   }
 );
 export default FoodItem;

@@ -1,9 +1,9 @@
 import User from "../models/user";
 import Supplyer from "../models/supplyer";
-import MgmtEmp from "../models/mgmtEmp";
-import NomalEmp from "../models/nomalEmp";
+import MgmtEmp from "../models/management-employee";
+import NomalEmp from "../models/nomal-employee";
 
-//! User ID generation
+//* User ID generation
 export const generateUserId = async (): Promise<string> => {
   const lastUser = await User.findOne({
     order: [["createdAt", "DESC"]],
@@ -19,7 +19,7 @@ export const generateUserId = async (): Promise<string> => {
   return `U${newIdNumber.toString().padStart(3, "0")}`;
 };
 
-//! Supplier ID generation
+//* Supplier ID generation
 export const generateSupplierId = async (): Promise<string> => {
   const lastSupplier = await Supplyer.findOne({
     order: [["createdAt", "DESC"]],
@@ -35,7 +35,7 @@ export const generateSupplierId = async (): Promise<string> => {
   return `S${newIdNumber.toString().padStart(3, "0")}`;
 };
 
-//! Normal Employee ID generation
+//* Normal Employee ID generation
 export const generateNormalEmployeeId = async (): Promise<string> => {
   const lastNormalEmployee = await NomalEmp.findOne({
     order: [["createdAt", "DESC"]],
@@ -51,7 +51,7 @@ export const generateNormalEmployeeId = async (): Promise<string> => {
   return `E${newIdNumber.toString().padStart(3, "0")}`;
 };
 
-//! Management Employee ID generation
+//* Management Employee ID generation
 export const generateManagementId = async (): Promise<string> => {
   const lastManagement = await MgmtEmp.findOne({
     order: [["createdAt", "DESC"]],

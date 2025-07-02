@@ -20,7 +20,7 @@ export const getAll = async (_req: Request, res: Response) => {
 };
 
 export const getById = async (req: Request, res: Response): Promise<void> => {
-  const supplier = await supplierService.getSupplyerById(+req.params.id);
+  const supplier = await supplierService.getSupplyerById(req.params.id);
   if (!supplier) {
     res.status(404).json({ message: "Supplier not found" });
     return;
@@ -30,7 +30,7 @@ export const getById = async (req: Request, res: Response): Promise<void> => {
 
 export const update = async (req: Request, res: Response): Promise<void> => {
   const supplier = await supplierService.updateSupplyer(
-    +req.params.id,
+    req.params.id,
     req.body
   );
   if (!supplier) {

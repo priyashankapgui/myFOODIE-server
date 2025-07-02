@@ -1,8 +1,13 @@
 export interface OrderAttributes {
   id?: string;
-  userId: string;
-  foodId: number;
-  quantity: number;
+  collectedByEmployeeId: string;
   orderDate: Date;
+  departmentId: number;
+  totalRequestOrderItems: number;
+  totalPreparedOrderItems: number;
+  totalOrderPrice: number;
+  totalOrderEmployeePrice: number;
+  totalOrderHospitalPrice: number;
   status: string;
+  mealType: string;
 }
