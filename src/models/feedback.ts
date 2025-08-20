@@ -10,7 +10,6 @@ class Feedback
 {
   public id!: number;
   public userId!: string;
-  public foodId!: number;
   public supplierId!: string;
   public comment!: string;
 }
@@ -23,10 +22,6 @@ Feedback.init(
     },
     userId: {
       type: DataTypes.STRING(36),
-      allowNull: false,
-    },
-    foodId: {
-      type: DataTypes.INTEGER,
       allowNull: false,
     },
     supplierId: {

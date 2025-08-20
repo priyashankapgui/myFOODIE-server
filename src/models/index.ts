@@ -66,10 +66,6 @@ OrderItem.belongsTo(NomalEmp, { foreignKey: "employeeId", as: "employee" });
 User.hasMany(Feedback, { foreignKey: "userId", as: "feedbacks" });
 Feedback.belongsTo(User, { foreignKey: "userId", as: "user" });
 
-//foodItem and feedback are one to many relationship
-FoodItem.hasMany(Feedback, { foreignKey: "foodId", as: "feedbacks" });
-Feedback.belongsTo(FoodItem, { foreignKey: "foodId", as: "foodItem" });
-
 //supplyer and feedback are one to many relationship
 Supplyer.hasMany(Feedback, { foreignKey: "supplierId", as: "feedbacks" });
 Feedback.belongsTo(Supplyer, { foreignKey: "supplierId", as: "supplier" });
