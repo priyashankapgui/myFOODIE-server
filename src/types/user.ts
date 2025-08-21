@@ -3,6 +3,7 @@ export interface UserAttributes {
   name: string;
   email: string;
   gender: string;
+  imageUrl?: string;
   password: string;
   role: string;
   token?: string;

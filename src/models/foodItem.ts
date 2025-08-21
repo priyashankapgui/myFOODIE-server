@@ -45,11 +45,11 @@ FoodItem.init(
     },
     employeeprice: {
       type: DataTypes.FLOAT,
-      allowNull: false,
+      allowNull: true,
     },
     hospitalprice: {
       type: DataTypes.FLOAT,
-      allowNull: false,
+      allowNull: true,
     },
     category: {
       type: DataTypes.STRING(50),

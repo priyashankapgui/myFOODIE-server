@@ -11,7 +11,7 @@ class OrderItem
   public id!: number;
   public orderId!: string;
   public foodItemId!: number;
-  public employeeId!: string;
+  public userId!: string;
   public quantity!: number;
 }
 OrderItem.init(
@@ -29,7 +29,7 @@ OrderItem.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    employeeId: {
+    userId: {
       type: DataTypes.STRING(36),
       allowNull: false,
     },

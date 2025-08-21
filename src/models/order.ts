@@ -8,8 +8,9 @@ class Order
   implements OrderAttributes
 {
   public id!: string;
-  public collectedByEmployeeId!: string;
+  public collectedByUserId!: string;
   public departmentId!: number;
+  public orderCreatorUserId!: string;
   public orderDate!: Date;
   public totalRequestOrderItems!: number;
   public totalPreparedOrderItems!: number;
@@ -23,10 +24,15 @@ Order.init(
   {
     id: {
       type: DataTypes.STRING(36),
+      allowNull: false,
       autoIncrement: false,
       primaryKey: true,
     },
-    collectedByEmployeeId: {
+    collectedByUserId: {
+      type: DataTypes.STRING(36),
+      allowNull: true,
+    },
+    orderCreatorUserId: {
       type: DataTypes.STRING(36),
       allowNull: false,
     },

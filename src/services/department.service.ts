@@ -1,7 +1,9 @@
 import Department from "../models/department";
+import { generateDepartmentId } from "../utils/genaretedId";
 
 export const createDepartment = async (data: any) => {
-  return await Department.create(data);
+  const customId = await generateDepartmentId();
+  return await Department.create({ ...data, id: customId });
 };
 
 export const getAllDepartments = async () => {

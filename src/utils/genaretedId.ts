@@ -2,6 +2,8 @@ import User from "../models/user";
 import Supplyer from "../models/supplyer";
 import MgmtEmp from "../models/management-employee";
 import NomalEmp from "../models/nomal-employee";
+import Order from "../models/order";
+import Department from "../models/department";
 
 //* User ID generation
 export const generateUserId = async (): Promise<string> => {
@@ -65,4 +67,36 @@ export const generateManagementId = async (): Promise<string> => {
   const newIdNumber = lastIdNumber + 1;
 
   return `M${newIdNumber.toString().padStart(3, "0")}`;
+};
+
+//* Order ID generation
+export const generateOrderId = async (): Promise<string> => {
+  const lastOrder = await Order.findOne({
+    order: [["createdAt", "DESC"]],
+  });
+
+  if (!lastOrder || !lastOrder.id) {
+    return "OR001";
+  }
+
+  const lastIdNumber = parseInt(lastOrder.id.slice(1)) || 0;
+  const newIdNumber = lastIdNumber + 1;
+
+  return `O${newIdNumber.toString().padStart(3, "0")}`;
+};
+
+//* Department ID generation
+export const generateDepartmentId = async (): Promise<string> => {
+  const lastDepartment = await Department.findOne({
+    order: [["createdAt", "DESC"]],
+  });
+
+  if (!lastDepartment || !lastDepartment.id) {
+    return "D001";
+  }
+
+  const lastIdNumber = parseInt(lastDepartment.id.slice(1)) || 0;
+  const newIdNumber = lastIdNumber + 1;
+
+  return `D${newIdNumber.toString().padStart(3, "0")}`;
 };
