@@ -6,18 +6,29 @@ import {
   updateDepartmentSchema,
 } from "../validation/department.schema";
 import { authenticate } from "../middlewares/auth.middleware";
+import { authorizeRoles } from "../middlewares/role.middleware";
 
 const router = Router();
 router.use(authenticate);
 
-router.post("/", validate(createDepartmentSchema), departmentController.create);
+router.post(
+  "/",
+  authorizeRoles("management"),
+  validate(createDepartmentSchema),
+  departmentController.create
+);
 router.get("/", departmentController.getAll);
 router.get("/:id", departmentController.getById);
 router.put(
   "/:id",
   validate(updateDepartmentSchema),
+  authorizeRoles("management"),
   departmentController.update
 );
-router.delete("/:id", departmentController.remove);
+router.delete(
+  "/:id",
+  authorizeRoles("management"),
+  departmentController.remove
+);
 
 export default router;
