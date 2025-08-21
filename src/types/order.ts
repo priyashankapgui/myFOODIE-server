@@ -1,6 +1,7 @@
 export interface OrderAttributes {
   id?: string;
-  collectedByEmployeeId: string;
+  collectedByUserId: string;
+  orderCreatorUserId: string;
   orderDate: Date;
   departmentId: number;
   totalRequestOrderItems: number;
@@ -10,4 +11,11 @@ export interface OrderAttributes {
   totalOrderHospitalPrice: number;
   status: string;
   mealType: string;
+}
+
+export interface OrderTotals {
+  totalRequestOrderItems: number;
+  totalOrderPrice: number;
+  totalOrderEmployeePrice: number;
+  totalOrderHospitalPrice: number;
 }

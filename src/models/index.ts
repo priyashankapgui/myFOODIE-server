@@ -47,8 +47,12 @@ FoodItem.hasMany(Order, { foreignKey: "foodId", as: "orders" });
 Order.belongsTo(FoodItem, { foreignKey: "foodId", as: "foodItem" });
 
 //order and employee are one to one relationship
-Order.hasOne(NomalEmp, { foreignKey: "employeeId", as: "employee" });
-NomalEmp.belongsTo(Order, { foreignKey: "employeeId", as: "order" });
+Order.hasOne(User, { foreignKey: "userId", as: "employee" });
+User.belongsTo(Order, { foreignKey: "userId", as: "order" });
+
+//order and department are one to many relationship
+Department.hasMany(Order, { foreignKey: "departmentId", as: "orders" });
+Order.belongsTo(Department, { foreignKey: "departmentId", as: "department" });
 
 //order and orderItem are one to many relationship
 Order.hasMany(OrderItem, { foreignKey: "orderId", as: "orderItems" });
@@ -58,17 +62,13 @@ OrderItem.belongsTo(Order, { foreignKey: "orderId", as: "order" });
 FoodItem.hasMany(OrderItem, { foreignKey: "foodItemId", as: "orderItems" });
 OrderItem.belongsTo(FoodItem, { foreignKey: "foodItemId", as: "foodItem" });
 
-//employee and orderItem are one to many relationship
-NomalEmp.hasMany(OrderItem, { foreignKey: "employeeId", as: "orderItems" });
-OrderItem.belongsTo(NomalEmp, { foreignKey: "employeeId", as: "employee" });
+//user and orderItem are one to many relationship
+User.hasMany(OrderItem, { foreignKey: "userId", as: "orderItems" });
+OrderItem.belongsTo(User, { foreignKey: "userId", as: "user" });
 
 //user and feedback are one to many relationship
 User.hasMany(Feedback, { foreignKey: "userId", as: "feedbacks" });
 Feedback.belongsTo(User, { foreignKey: "userId", as: "user" });
-
-//foodItem and feedback are one to many relationship
-FoodItem.hasMany(Feedback, { foreignKey: "foodId", as: "feedbacks" });
-Feedback.belongsTo(FoodItem, { foreignKey: "foodId", as: "foodItem" });
 
 //supplyer and feedback are one to many relationship
 Supplyer.hasMany(Feedback, { foreignKey: "supplierId", as: "feedbacks" });

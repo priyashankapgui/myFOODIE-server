@@ -19,6 +19,22 @@ export const getAll = async (_req: Request, res: Response) => {
   }
 };
 
+export const getBySupplierId = async (req: Request, res: Response) => {
+  try {
+    const supplierId = req.params.supplierId;
+    const feedbacks = await feedbackService.getFeedbackBySupplierId(
+      +supplierId
+    );
+    if (!feedbacks) {
+      res.status(404).json({ message: "Feedback not found" });
+      return;
+    }
+    res.status(200).json(feedbacks);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching feedback", error });
+  }
+};
+
 export const getById = async (req: Request, res: Response): Promise<void> => {
   try {
     const feedback = await feedbackService.getFeedbackById(+req.params.id);

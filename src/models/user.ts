@@ -13,6 +13,7 @@ class User
   public name!: string;
   public email!: string;
   public gender!: string;
+  public imageUrl!: string;
   public password!: string;
   public role!: string;
   public token?: string;
@@ -40,6 +41,10 @@ User.init(
       validate: {
         isIn: [["male", "female", "other"]],
       },
+    },
+    imageUrl: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     password: {
       type: DataTypes.STRING,

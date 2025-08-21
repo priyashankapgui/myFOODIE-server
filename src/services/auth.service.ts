@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/user";
 import MgmtEmp from "../models/management-employee";
-import NomalEmp from "../models/nomal-employee";
+import NormalEmp from "../models/nomal-employee";
 import Supplyer from "../models/supplyer";
 import { UserAttributes } from "../types/user";
 import {
@@ -28,7 +28,7 @@ export const signup = async (
   const t = await sequelize.transaction();
 
   try {
-    const { name, email, password, gender, role } = userData;
+    const { name, email, password, gender, imageUrl, role } = userData;
 
     // Check if user already exists
     const existingUser = await User.findOne({
@@ -50,6 +50,7 @@ export const signup = async (
         name: name!,
         email: email!,
         gender: gender!,
+        imageUrl: imageUrl,
         password: hashedPassword,
         role: role!,
       },
@@ -78,7 +79,7 @@ export const signup = async (
             "Position and Department ID are required for employee"
           );
         const normalEmployeeId = await generateNormalEmployeeId();
-        await NomalEmp.create(
+        await NormalEmp.create(
           {
             id: normalEmployeeId,
             userId: newUser.id,
@@ -129,7 +130,26 @@ export const login = async (email: string, password: string) => {
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) throw new Error("Invalid credentials");
 
-  // Include role in token
+  let roleId: string | null = null;
+
+  // Check which type of user and get roleId
+  if (user.role === "supplyer") {
+    const supplier = await Supplyer.findOne({ where: { userId: user.id } });
+    roleId = supplier?.id || null;
+  } else if (user.role === "management") {
+    const managementEmp = await MgmtEmp.findOne({ where: { userId: user.id } });
+    roleId = managementEmp?.id || null;
+  } else if (user.role === "normalEmployee") {
+    const employee = await NormalEmp.findOne({ where: { userId: user.id } });
+    roleId = employee?.id || null;
+  }
+
+  console.log("User role:", user.role, "Role ID:", roleId);
+
+  if (!roleId) {
+    throw new Error("Role ID not found for user");
+  }
+
   //* This is the payload for the JWT token
   //* Token  has the three parts: Header, Payload, Signature
   const token = jwt.sign(
@@ -156,6 +176,7 @@ export const login = async (email: string, password: string) => {
       name: user.name,
       email: user.email,
       role: user.role,
+      roleId: roleId,
     },
   };
 };
