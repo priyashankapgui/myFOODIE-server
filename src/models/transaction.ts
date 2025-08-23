@@ -8,10 +8,10 @@ class Transaction
   extends Model<TransactionAttributes, TransactionCreationAttributes>
   implements TransactionAttributes
 {
-  public id!: number;
+  public id!: string;
   public supplyerId!: string;
   public monthlyAmount!: number;
-  public status!: string;
+  public paymentStatus!: string;
   public transactionDate!: Date;
   public paymentMethod!: string;
 }
@@ -19,18 +19,18 @@ class Transaction
 Transaction.init(
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: DataTypes.STRING(36),
       primaryKey: true,
+      allowNull: false,
     },
     transactionDate: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true,
       defaultValue: DataTypes.NOW,
     },
     paymentMethod: {
       type: DataTypes.STRING(50),
-      allowNull: false,
+      allowNull: true,
       defaultValue: "credit_card",
     },
     supplyerId: {
@@ -41,10 +41,13 @@ Transaction.init(
       type: DataTypes.FLOAT,
       allowNull: false,
     },
-    status: {
+    paymentStatus: {
       type: DataTypes.STRING(20),
       allowNull: false,
       defaultValue: "pending",
+      validate: {
+        isIn: [["pending", "paid", "unpaid"]],
+      },
     },
   },
   {

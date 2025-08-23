@@ -11,6 +11,7 @@ import {
   generateNormalEmployeeId,
   generateManagementId,
 } from "../utils/genaretedId";
+import { sendEmail } from "../utils/sendEmail";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
 import sequelize from "../config/db";
@@ -164,11 +165,9 @@ export const login = async (email: string, password: string) => {
     }
   );
 
-  // Save token in DB if needed
   user.token = token;
   await user.save();
 
-  // Return token and limited user data
   return {
     token,
     user: {
@@ -190,6 +189,7 @@ export const logout = async (userId: string) => {
   await user.save();
 };
 
+// Update user service function
 export const updateUser = async (
   userId: string,
   userData: Partial<Omit<UserAttributes, "id">>
@@ -199,4 +199,47 @@ export const updateUser = async (
 
   await user.update(userData);
   return user;
+};
+
+//Forgot Password (Send OTP)
+export const forgotPassword = async (email: string) => {
+  const user = await User.findOne({ where: { email } });
+  if (!user) throw new Error("User not found");
+
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+  user.resetOtp = otp;
+  const expiry = new Date(Date.now() + 5 * 60 * 1000);
+  user.resetOtpExpiry = expiry; // 5 mins
+  await user.save();
+
+  // Send OTP via email
+  await sendEmail(user.email, "Password Reset OTP", `${otp}`, expiry);
+
+  return { message: "OTP sent to email" };
+};
+
+//Reset Password
+export const resetPassword = async (
+  email: string,
+  otp: string,
+  newPassword: string
+) => {
+  const user = await User.findOne({ where: { email } });
+  if (!user) throw new Error("User not found");
+
+  if (user.resetOtp !== otp) throw new Error("Invalid OTP");
+  if (!user.resetOtpExpiry || user.resetOtpExpiry < new Date())
+    throw new Error("OTP expired");
+
+  // Hash new password
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  user.password = hashedPassword;
+
+  // Clear OTP
+  user.resetOtp = undefined;
+  user.resetOtpExpiry = undefined;
+  await user.save();
+
+  return { message: "Password reset successful" };
 };

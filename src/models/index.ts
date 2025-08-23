@@ -7,6 +7,7 @@ import Order from "./order";
 import OrderItem from "./orderItems";
 import FoodItem from "./foodItem";
 import Feedback from "./feedback";
+import OrderSummary from "./order-summary";
 import Transaction from "./transaction";
 
 //mgmtEmp and nomalEmp are one to one relationship with user
@@ -70,9 +71,20 @@ OrderItem.belongsTo(User, { foreignKey: "userId", as: "user" });
 User.hasMany(Feedback, { foreignKey: "userId", as: "feedbacks" });
 Feedback.belongsTo(User, { foreignKey: "userId", as: "user" });
 
+//supplyer and orderSummary are one to many relationship
+Supplyer.hasMany(OrderSummary, {
+  foreignKey: "supplierId",
+  as: "orderSummaries",
+});
+OrderSummary.belongsTo(Supplyer, { foreignKey: "supplierId", as: "supplier" });
+
 //supplyer and feedback are one to many relationship
 Supplyer.hasMany(Feedback, { foreignKey: "supplierId", as: "feedbacks" });
 Feedback.belongsTo(Supplyer, { foreignKey: "supplierId", as: "supplier" });
+
+//supplyer and  order are one to many relationship
+Supplyer.hasMany(Order, { foreignKey: "supplierId", as: "orders" });
+Order.belongsTo(Supplyer, { foreignKey: "supplierId", as: "supplier" });
 
 //user and transaction are one to many relationship
 User.hasMany(Transaction, { foreignKey: "supplyerId", as: "transactions" });
@@ -89,4 +101,5 @@ export {
   FoodItem,
   Feedback,
   Transaction,
+  OrderSummary,
 };

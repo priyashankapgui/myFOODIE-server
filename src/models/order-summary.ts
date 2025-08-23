@@ -13,6 +13,9 @@ class OrderSummaryModel
   public monthlyTotalPrice!: number;
   public monthlyTotalEmployeePrice!: number;
   public monthlyTotalHospitalPrice!: number;
+  public supplierId!: string;
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
 }
 OrderSummaryModel.init(
   {
@@ -45,6 +48,10 @@ OrderSummaryModel.init(
       type: DataTypes.FLOAT,
       allowNull: false,
       defaultValue: 0.0,
+    },
+    supplierId: {
+      type: DataTypes.STRING(36),
+      allowNull: true,
     },
   },
   {

@@ -7,4 +7,6 @@ export interface UserAttributes {
   password: string;
   role: string;
   token?: string;
+  resetOtp?: string;
+  resetOtpExpiry?: Date;
 }

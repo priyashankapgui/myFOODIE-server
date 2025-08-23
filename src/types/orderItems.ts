@@ -4,4 +4,5 @@ export interface OrderItemAttributes {
   foodItemId: number;
   userId: string;
   quantity: number;
+  receivedNumberOfItem?: number;
 }

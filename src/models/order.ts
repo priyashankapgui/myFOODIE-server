@@ -19,6 +19,10 @@ class Order
   public totalOrderHospitalPrice!: number;
   public status!: string;
   public mealType!: string;
+  public toBePaidHospitalPrice?: number;
+  public toBePaidEmployeePrice?: number;
+  public toBePaidTotalPrice?: number;
+  public supplierId?: string;
 }
 Order.init(
   {
@@ -77,13 +81,34 @@ Order.init(
       allowNull: false,
       defaultValue: 0.0,
     },
+    toBePaidHospitalPrice: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+      defaultValue: 0.0,
+    },
+    toBePaidEmployeePrice: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+      defaultValue: 0.0,
+    },
+    toBePaidTotalPrice: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+      defaultValue: 0.0,
+    },
     status: {
       type: DataTypes.STRING(20),
       allowNull: false,
       defaultValue: "pending",
       validate: {
-        isIn: [["pending", "prepared", "completed", "cancelled"]],
+        isIn: [
+          ["pending", "prepared", "completed", "non-completed", "cancelled"],
+        ],
       },
+    },
+    supplierId: {
+      type: DataTypes.STRING(36),
+      allowNull: true,
     },
   },
   {

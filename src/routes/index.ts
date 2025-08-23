@@ -7,6 +7,7 @@ import foodItemRoutes from "./foodItem.route";
 import managmentEmpRoutes from "./management-employee.route";
 import nomalEmpRoutes from "./nomal-employee.route";
 import orderRoutes from "./order.route";
+import orderSummaryRoutes from "./order-summary.route";
 
 const router = express.Router();
 
@@ -18,5 +19,6 @@ router.use("/suppliers", supplierRoutes);
 router.use("/management-employees", managmentEmpRoutes);
 router.use("/normal-employees", nomalEmpRoutes);
 router.use("/orders", orderRoutes);
+router.use("/order-summaries", orderSummaryRoutes);
 
 export default router;

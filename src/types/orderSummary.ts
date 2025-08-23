@@ -5,4 +5,5 @@ export interface OrderSummary {
   monthlyTotalPrice: number;
   monthlyTotalEmployeePrice: number;
   monthlyTotalHospitalPrice: number;
+  supplierId: string;
 }

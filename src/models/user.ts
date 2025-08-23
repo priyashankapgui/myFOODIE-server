@@ -17,6 +17,8 @@ class User
   public password!: string;
   public role!: string;
   public token?: string;
+  public resetOtp?: string;
+  public resetOtpExpiry?: Date;
 }
 
 User.init(
@@ -58,6 +60,14 @@ User.init(
       type: DataTypes.STRING,
       allowNull: true,
       unique: true,
+    },
+    resetOtp: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    resetOtpExpiry: {
+      type: DataTypes.DATE,
+      allowNull: true,
     },
   },
   {

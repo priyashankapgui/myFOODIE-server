@@ -4,6 +4,7 @@ import MgmtEmp from "../models/management-employee";
 import NomalEmp from "../models/nomal-employee";
 import Order from "../models/order";
 import Department from "../models/department";
+import Transaction from "../models/transaction";
 
 //* User ID generation
 export const generateUserId = async (): Promise<string> => {
@@ -79,10 +80,10 @@ export const generateOrderId = async (): Promise<string> => {
     return "OR001";
   }
 
-  const lastIdNumber = parseInt(lastOrder.id.slice(1)) || 0;
+  const lastIdNumber = parseInt(lastOrder.id.slice(2)) || 0;
   const newIdNumber = lastIdNumber + 1;
 
-  return `O${newIdNumber.toString().padStart(3, "0")}`;
+  return `OR${newIdNumber.toString().padStart(3, "0")}`;
 };
 
 //* Department ID generation
@@ -99,4 +100,24 @@ export const generateDepartmentId = async (): Promise<string> => {
   const newIdNumber = lastIdNumber + 1;
 
   return `D${newIdNumber.toString().padStart(3, "0")}`;
+};
+
+// Transaction ID generation
+export const generateComplexTransactionId = async (): Promise<string> => {
+  const timestamp = Date.now().toString(36); // Base36 timestamp
+  const randomSuffix = Math.random().toString(36).substring(2, 8); // 6 random chars
+
+  const lastTransaction = await Transaction.findOne({
+    order: [["createdAt", "DESC"]],
+  });
+
+  let sequence = 1;
+  if (lastTransaction && lastTransaction.id) {
+    const lastIdParts = lastTransaction.id.split("-");
+    sequence = parseInt(lastIdParts[2] || "0") + 1;
+  }
+
+  return `TXN-${timestamp}-${sequence
+    .toString()
+    .padStart(4, "0")}-${randomSuffix}`;
 };

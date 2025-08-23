@@ -70,7 +70,8 @@ export const updateStatus = async (req: Request, res: Response) => {
   try {
     const updatedOrder = await orderService.updateOrderStatus(
       req.params.id,
-      req.body.status
+      req.body.status,
+      req.body.receivedItems
     );
     if (!updatedOrder) {
       res.status(404).json({ message: "Order not found" });

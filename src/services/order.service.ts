@@ -1,8 +1,14 @@
 import Order from "../models/order";
 import OrderItem from "../models/orderItems";
 import sequelize from "../config/db";
-import { calculateOrderTotals } from "../utils/orderCalculation";
+import {
+  calculateOrderTotals,
+  isValidStatusTransition,
+  calculateTobePaidValues,
+} from "../utils/orderCalculation";
 import { generateOrderId } from "../utils/genaretedId";
+import { FoodItem } from "../models";
+import { updateMonthlySummary } from "./order-summary.service";
 
 // Create a new order
 export const createOrder = async (orderData: any, orderItems: any[]) => {
@@ -99,19 +105,132 @@ export const updateOrder = async (id: string, data: any) => {
 };
 
 // Update order status
-export const updateOrderStatus = async (id: string, status: string) => {
+// Update order status
+export const updateOrderStatus = async (
+  id: string,
+  status: string,
+  receivedItems: Array<{
+    orderItemId: number;
+    receivedQuantity: number;
+  }> = [] // Add default empty array
+) => {
   const transaction = await sequelize.transaction();
+  console.log("Updating order status:", {
+    orderId: id,
+    status,
+    receivedItems,
+  });
+
   try {
-    const order = await Order.findByPk(id, { transaction });
+    const order = await Order.findByPk(id, {
+      transaction,
+    });
+
     if (!order) {
       await transaction.rollback();
       return null;
     }
 
-    await order.update({ status }, { transaction });
+    // Validate status transition
+    if (!isValidStatusTransition(order.status, status)) {
+      await transaction.rollback();
+      throw new Error(
+        `Invalid status transition from ${order.status} to ${status}`
+      );
+    }
+
+    console.log("Updating order status:", {
+      orderId: order.id,
+      fromStatus: order.status,
+      toStatus: status,
+    });
+
+    // Handle different status updates
+    if (status === "completed") {
+      await order.update(
+        {
+          status,
+          toBePaidTotalPrice: order.totalOrderPrice || 0,
+          toBePaidEmployeePrice: order.totalOrderEmployeePrice || 0,
+          toBePaidHospitalPrice: order.totalOrderHospitalPrice || 0,
+          totalPreparedOrderItems: order.totalRequestOrderItems || 0,
+        },
+        { transaction }
+      );
+    } else if (status === "non-completed") {
+      // For non-completed orders, use the provided receivedItems
+      const orderItems = await OrderItem.findAll({
+        where: { orderId: id },
+        include: [
+          {
+            model: FoodItem,
+            as: "foodItem",
+          },
+        ],
+        transaction,
+      });
+
+      // Calculate total prepared order items
+      const totalPreparedOrderItems = orderItems.reduce(
+        (sum, item) => sum + (item.receivedNumberOfItem || 0),
+        0
+      );
+
+      // Use the provided ReceivedItems to calculate adjustments
+      const adjustments = await calculateTobePaidValues(
+        orderItems,
+        receivedItems
+      );
+
+      // Update each order item
+      for (const item of orderItems) {
+        const receivedItem = receivedItems.find(
+          (ri) => ri.orderItemId === item.id
+        );
+        const receivedQuantity = receivedItem?.receivedQuantity ?? 0;
+
+        console.log("Updating order item:", {
+          itemId: item.id,
+          quantity: item.quantity,
+          receivedQuantity,
+        });
+
+        await OrderItem.update(
+          { receivedNumberOfItem: receivedQuantity },
+          { where: { id: item.id }, transaction }
+        );
+      }
+      console.log("Adjustments for non-completed order:", adjustments);
+
+      // Update order with adjusted prices
+      await order.update(
+        {
+          status,
+          toBePaidTotalPrice: adjustments.tobePaidPrice,
+          toBePaidEmployeePrice: adjustments.tobePaidEmployeePrice,
+          toBePaidHospitalPrice: adjustments.tobePaidHospitalPrice,
+          totalPreparedOrderItems: totalPreparedOrderItems,
+        },
+        { transaction }
+      );
+    } else {
+      // For other status changes (pending, prepared, cancelled)
+      await order.update({ status }, { transaction });
+    }
+
     await transaction.commit();
+
+    if (status === "completed" || status === "non-completed") {
+      // Update the monthly summary for this order's supplier
+      if (order.supplierId) {
+        await updateMonthlySummary(order.supplierId, order.orderDate);
+      }
+    }
+
+    console.log("Order status updated successfully 😮‍💨");
     return order;
   } catch (error) {
+    console.error("Error in updateOrderStatus:", error);
     await transaction.rollback();
     throw error;
   }
@@ -130,7 +249,7 @@ export const deleteOrder = async (id: string) => {
     await OrderItem.destroy({ where: { orderId: id }, transaction });
     await order.destroy({ transaction });
 
-    await transaction.commit();
+    // Update monthly
     return true;
   } catch (error) {
     await transaction.rollback();
