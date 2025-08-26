@@ -1,5 +1,6 @@
 import NomalEmployee from "../models/nomal-employee";
 import User from "../models/user";
+import Department from "../models/department";
 import bcrypt from "bcryptjs";
 
 // Create a new normal employee
@@ -15,7 +16,12 @@ export const getAllNomalEmps = async () => {
       {
         model: User,
         as: "user",
-        attributes: ["name", "email"],
+        attributes: ["name", "email", "imageUrl"],
+      },
+      {
+        model: Department,
+        as: "department",
+        attributes: ["name"],
       },
     ],
     raw: true,

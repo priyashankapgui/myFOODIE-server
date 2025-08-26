@@ -15,6 +15,7 @@ import { sendEmail } from "../utils/sendEmail";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
 import sequelize from "../config/db";
+import { now } from "sequelize/types/utils";
 
 export const signup = async (
   userData: Partial<UserAttributes> & {
@@ -184,8 +185,7 @@ export const login = async (email: string, password: string) => {
 export const logout = async (userId: string) => {
   const user = await User.findByPk(userId);
   if (!user) throw new Error("User not found");
-
-  user.token = undefined;
+  user.token = null as unknown as string;
   await user.save();
 };
 

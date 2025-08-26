@@ -1,5 +1,6 @@
 import express from "express";
 import swaggerUi from "swagger-ui-express";
+import cors from "cors";
 import fs from "fs";
 import path from "path";
 import sequelize from "./config/db";
@@ -10,6 +11,14 @@ const app = express();
 const PORT = Number(process.env.PORT) || 8000;
 
 app.use(express.json());
+
+//  Enable CORS
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 
 // Load Swagger documentation
 const swaggerFilePath = path.resolve(__dirname, "./swagger/swagger.json");
