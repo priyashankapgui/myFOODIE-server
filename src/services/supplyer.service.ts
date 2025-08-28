@@ -13,7 +13,7 @@ export const getAllSupplyers = async () => {
       {
         model: User,
         as: "user",
-        attributes: ["name", "email"],
+        attributes: ["name", "email", "gender", "imageUrl"],
       },
     ],
     raw: true,
@@ -33,7 +33,7 @@ export const getSupplyerById = async (id: string) => {
       {
         model: User,
         as: "user",
-        attributes: ["name", "email"],
+        attributes: ["name", "email", "gender", "imageUrl"],
       },
     ],
     raw: true,
@@ -104,7 +104,7 @@ export const updateSupplyer = async (id: string, data: any) => {
   }
 };
 
-export const deleteSupplyer = async (id: number) => {
+export const deleteSupplyer = async (id: string) => {
   const transaction = await Supplyer.sequelize?.transaction();
 
   try {

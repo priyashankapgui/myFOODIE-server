@@ -41,7 +41,7 @@ export const update = async (req: Request, res: Response): Promise<void> => {
 };
 
 export const remove = async (req: Request, res: Response): Promise<void> => {
-  const success = await NomalEmployee.deleteNomalEmp(+req.params.id);
+  const success = await NomalEmployee.deleteNomalEmp(req.params.id);
 
   if (!success) {
     res.status(404).json({ message: "Normal employee not found" });

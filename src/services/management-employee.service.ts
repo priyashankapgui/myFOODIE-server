@@ -15,7 +15,7 @@ export const getAllMgmtEmps = async () => {
       {
         model: User,
         as: "user",
-        attributes: ["name", "email"],
+        attributes: ["name", "email", "gender", "imageUrl"],
       },
     ],
     raw: true,
@@ -26,6 +26,8 @@ export const getAllMgmtEmps = async () => {
     ...managementEmp,
     name: managementEmp.User?.name,
     email: managementEmp.User?.email,
+    gender: managementEmp.User?.gender,
+    imageUrl: managementEmp.User?.imageUrl,
   }));
 };
 
@@ -36,7 +38,7 @@ export const getMgmtEmpById = async (id: string) => {
       {
         model: User,
         as: "user",
-        attributes: ["name", "email"],
+        attributes: ["name", "email", "gender", "imageUrl"],
       },
     ],
     raw: true,
@@ -49,6 +51,8 @@ export const getMgmtEmpById = async (id: string) => {
     ...managementEmp,
     name: managementEmp.User?.name,
     email: managementEmp.User?.email,
+    gender: managementEmp.User?.gender,
+    imageUrl: managementEmp.User?.imageUrl,
   };
 };
 
@@ -93,7 +97,7 @@ export const updateMgmtEmp = async (id: string, data: any) => {
         {
           model: User,
           as: "user",
-          attributes: ["name", "email"],
+          attributes: ["name", "email", "gender", "imageUrl"],
         },
       ],
     });
@@ -103,6 +107,8 @@ export const updateMgmtEmp = async (id: string, data: any) => {
       ...updatedManagementEmp.get({ plain: true }),
       name: updatedManagementEmp.user?.name,
       email: updatedManagementEmp.user?.email,
+      gender: updatedManagementEmp.user?.gender,
+      imageUrl: updatedManagementEmp.user?.imageUrl,
     };
   } catch (error) {
     await transaction?.rollback();
@@ -111,7 +117,7 @@ export const updateMgmtEmp = async (id: string, data: any) => {
 };
 
 // Delete a management employee by ID
-export const deleteMgmtEmp = async (id: number) => {
+export const deleteMgmtEmp = async (id: string) => {
   const transaction = await ManagementEmployee.sequelize?.transaction();
 
   try {

@@ -46,7 +46,7 @@ export const update = async (req: Request, res: Response): Promise<void> => {
 
 // Delete a supplier
 export const remove = async (req: Request, res: Response): Promise<void> => {
-  const success = await supplierService.deleteSupplyer(+req.params.id);
+  const success = await supplierService.deleteSupplyer(req.params.id);
 
   if (!success) {
     res.status(404).json({ message: "Supplier not found" });

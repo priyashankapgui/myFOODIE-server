@@ -86,21 +86,21 @@ export const generateOrderId = async (): Promise<string> => {
   return `OR${newIdNumber.toString().padStart(3, "0")}`;
 };
 
-//* Department ID generation
-export const generateDepartmentId = async (): Promise<string> => {
-  const lastDepartment = await Department.findOne({
-    order: [["createdAt", "DESC"]],
-  });
+// //* Department ID generation
+// export const generateDepartmentId = async (): Promise<string> => {
+//   const lastDepartment = await Department.findOne({
+//     order: [["createdAt", "DESC"]],
+//   });
 
-  if (!lastDepartment || !lastDepartment.id) {
-    return "D001";
-  }
+//   if (!lastDepartment || !lastDepartment.id) {
+//     return "D001";
+//   }
 
-  const lastIdNumber = parseInt(lastDepartment.id.slice(1)) || 0;
-  const newIdNumber = lastIdNumber + 1;
+//   const lastIdNumber = parseInt(lastDepartment.id.slice(1)) || 0;
+//   const newIdNumber = lastIdNumber + 1;
 
-  return `D${newIdNumber.toString().padStart(3, "0")}`;
-};
+//   return `D${newIdNumber.toString().padStart(3, "0")}`;
+// };
 
 // Transaction ID generation
 export const generateComplexTransactionId = async (): Promise<string> => {

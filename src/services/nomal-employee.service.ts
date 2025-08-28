@@ -42,7 +42,12 @@ export const getNomalEmpById = async (id: string) => {
       {
         model: User,
         as: "user",
-        attributes: ["name", "email"],
+        attributes: ["name", "email", "gender"],
+      },
+      {
+        model: Department,
+        as: "department",
+        attributes: ["name"],
       },
     ],
     raw: true,
@@ -55,6 +60,7 @@ export const getNomalEmpById = async (id: string) => {
     ...normalemployee,
     name: normalemployee.User?.name,
     email: normalemployee.User?.email,
+    gender: normalemployee.gender,
   };
 };
 
@@ -97,7 +103,7 @@ export const updateNomalEmp = async (id: string, data: any) => {
         {
           model: User,
           as: "user",
-          attributes: ["name", "email"],
+          attributes: ["name", "email", "gender"],
         },
       ],
     });
@@ -107,6 +113,7 @@ export const updateNomalEmp = async (id: string, data: any) => {
       ...updatedNormalEmp.get({ plain: true }),
       name: updatedNormalEmp.user?.name,
       email: updatedNormalEmp.user?.email,
+      gender: updatedNormalEmp.user?.gender,
     };
   } catch (error) {
     await transaction?.rollback();
@@ -115,7 +122,7 @@ export const updateNomalEmp = async (id: string, data: any) => {
 };
 
 // Delete a normal employee by ID
-export const deleteNomalEmp = async (id: number) => {
+export const deleteNomalEmp = async (id: string) => {
   const transaction = await NomalEmployee.sequelize?.transaction();
 
   try {

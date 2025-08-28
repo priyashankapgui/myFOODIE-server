@@ -12,11 +12,11 @@ export const getAllFeedbacks = async () => {
 };
 
 // Get a feedback by supplier ID
-export const getFeedbackBySupplierId = async (supplierId: number) => {
+export const getFeedbackBySupplierId = async (supplierId: string) => {
   return await Feedback.findAll({ where: { supplierId } });
 };
 
 // Get a feedback by ID
-export const getFeedbackById = async (id: number) => {
+export const getFeedbackById = async (id: string) => {
   return await Feedback.findByPk(id);
 };

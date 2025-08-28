@@ -22,9 +22,7 @@ export const getAll = async (_req: Request, res: Response) => {
 export const getBySupplierId = async (req: Request, res: Response) => {
   try {
     const supplierId = req.params.supplierId;
-    const feedbacks = await feedbackService.getFeedbackBySupplierId(
-      +supplierId
-    );
+    const feedbacks = await feedbackService.getFeedbackBySupplierId(supplierId);
     if (!feedbacks) {
       res.status(404).json({ message: "Feedback not found" });
       return;
@@ -37,7 +35,7 @@ export const getBySupplierId = async (req: Request, res: Response) => {
 
 export const getById = async (req: Request, res: Response): Promise<void> => {
   try {
-    const feedback = await feedbackService.getFeedbackById(+req.params.id);
+    const feedback = await feedbackService.getFeedbackById(req.params.id);
     if (!feedback) {
       res.status(404).json({ message: "Feedback not found" });
       return;

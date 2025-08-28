@@ -50,7 +50,7 @@ export const update = async (req: Request, res: Response): Promise<void> => {
 };
 
 export const remove = async (req: Request, res: Response): Promise<void> => {
-  const success = await ManagementEmployeeService.deleteMgmtEmp(+req.params.id);
+  const success = await ManagementEmployeeService.deleteMgmtEmp(req.params.id);
 
   if (!success) {
     res.status(404).json({ message: "Management employee not found" });

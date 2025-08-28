@@ -1,5 +1,5 @@
 export interface DepartmentAttributes {
-  id: string;
+  id: number;
   name: string;
   totalemp: number;
 }

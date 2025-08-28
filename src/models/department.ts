@@ -9,7 +9,7 @@ class Department
   extends Model<DepartmentAttributes, DepartmentCreationAttributes>
   implements DepartmentAttributes
 {
-  public id!: string;
+  public id!: number;
   public name!: string;
   public totalemp!: number;
 }
@@ -17,9 +17,9 @@ class Department
 Department.init(
   {
     id: {
-      type: DataTypes.STRING(10),
+      type: DataTypes.INTEGER,
       allowNull: false,
-      autoIncrement: false,
+      autoIncrement: true,
       primaryKey: true,
     },
     name: {

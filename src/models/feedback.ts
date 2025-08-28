@@ -29,7 +29,7 @@ Feedback.init(
       allowNull: false,
     },
     comment: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING(100),
       allowNull: true,
     },
   },
