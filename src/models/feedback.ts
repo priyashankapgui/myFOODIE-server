@@ -11,6 +11,7 @@ class Feedback
   public id!: number;
   public userId!: string;
   public supplierId!: string;
+  public feedbackDate!: Date;
   public comment!: string;
 }
 Feedback.init(
@@ -24,13 +25,17 @@ Feedback.init(
       type: DataTypes.STRING(36),
       allowNull: false,
     },
+    feedbackDate: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
     supplierId: {
       type: DataTypes.STRING(36),
       allowNull: false,
     },
     comment: {
       type: DataTypes.STRING(100),
-      allowNull: true,
+      allowNull: false,
     },
   },
   {
