@@ -15,7 +15,7 @@ router.post(
   feedbackController.create
 );
 router.get("/", authorizeRoles("management"), feedbackController.getAll);
-router.get("/:supplierId", feedbackController.getBySupplierId);
+router.get("/getbysupplierId/:supplierId", feedbackController.getBySupplierId);
 router.get("/:id", feedbackController.getById);
 
 export default router;

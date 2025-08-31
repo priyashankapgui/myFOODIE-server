@@ -18,6 +18,7 @@ router.post(
   foodItemController.create
 );
 router.get("/", foodItemController.getAll);
+router.get("/supplier/:supplierId", foodItemController.getBySupplierId);
 router.get("/:id", foodItemController.getById);
 router.put(
   "/:id",

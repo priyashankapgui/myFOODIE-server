@@ -1,5 +1,7 @@
 import Feedback from "../models/feedback";
 import { FeedbackAttributes } from "../types/feedback";
+import Supplier from "../models/supplyer";
+import User from "../models/user";
 
 // Create a new feedback
 export const createFeedback = async (data: FeedbackAttributes) => {
@@ -18,5 +20,28 @@ export const getFeedbackBySupplierId = async (supplierId: string) => {
 
 // Get a feedback by ID
 export const getFeedbackById = async (id: string) => {
-  return await Feedback.findByPk(id);
+  const feedback: any = await Feedback.findByPk(id, {
+    include: [
+      {
+        model: Supplier,
+        as: "supplier",
+        include: [
+          {
+            model: User,
+            as: "user",
+            attributes: ["name"],
+          },
+        ],
+      },
+    ],
+    raw: true,
+    nest: true,
+  });
+
+  if (!feedback) return null;
+
+  return {
+    ...feedback,
+    supplierName: feedback.supplyer?.user?.name,
+  };
 };

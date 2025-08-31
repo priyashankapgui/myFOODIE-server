@@ -10,3 +10,8 @@ export const foodItemHooks = {
     item.hospitalprice = item.price * 0.5;
   },
 };
+
+export const foodItemAvailableHooks = {
+  beforeCreate: (item: FoodItem) => {},
+  beforeUpdate: (item: FoodItem) => {},
+};

@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/user";
 import MgmtEmp from "../models/management-employee";
 import NormalEmp from "../models/nomal-employee";
+import Department from "../models/department";
 import Supplyer from "../models/supplyer";
 import { UserAttributes } from "../types/user";
 import {
@@ -189,22 +190,95 @@ export const logout = async (userId: string) => {
   await user.save();
 };
 
-// Update user service function
-export const updateUser = async (
-  userId: string,
-  userData: Partial<Omit<UserAttributes, "id">>
-) => {
+//* Update user service function
+export const updateUserById = async (userId: string, updates: any) => {
   const user = await User.findByPk(userId);
-  if (!user) throw new Error("User not found");
+  if (!user) return { message: "User not found" };
 
-  await user.update(userData);
-  return user;
+  let updatedRoleDetails = null;
+
+  if (user.role === "supplyer") {
+    // Allow only phone and address updates for suppliers
+    const { phone, address } = updates;
+
+    updatedRoleDetails = await Supplyer.update(
+      { phone, address },
+      { where: { userId }, returning: true }
+    );
+
+    // return updated details
+    const supplyer = await Supplyer.findOne({
+      where: { userId },
+      attributes: ["id", "foodType", "address", "phone"],
+    });
+
+    return {
+      ...user.toJSON(),
+      roleDetails: supplyer,
+    };
+  }
+  if (user.role === "management") {
+    updatedRoleDetails = await MgmtEmp.findOne({
+      where: { userId },
+      attributes: ["id", "position"],
+    });
+  } else if (user.role === "normalEmployee") {
+    updatedRoleDetails = await NormalEmp.findOne({
+      where: { userId },
+      attributes: ["id", "departmentId", "position"],
+    });
+  }
+
+  return {
+    ...user.toJSON(),
+    roleDetails: updatedRoleDetails,
+  };
 };
 
-//Forgot Password (Send OTP)
+//* Get User by ID
+export const getUserById = async (userId: string) => {
+  const user = await User.findByPk(userId);
+  if (!user) return { message: "User not found" };
+
+  let roleDetails: any = null;
+
+  if (user.role === "management") {
+    roleDetails = await MgmtEmp.findOne({
+      where: { userId },
+      attributes: ["id", "position"],
+    });
+  } else if (user.role === "supplyer") {
+    roleDetails = await Supplyer.findOne({
+      where: { userId },
+      attributes: ["id", "foodType", "address", "phone"],
+    });
+  } else if (user.role === "normalEmployee") {
+    roleDetails = await NormalEmp.findOne({
+      where: { userId },
+      attributes: ["id", "departmentId", "position"],
+    });
+
+    if (roleDetails && roleDetails.departmentId) {
+      const department = await Department.findByPk(roleDetails.departmentId, {
+        attributes: ["name"],
+      });
+      roleDetails = {
+        ...roleDetails.toJSON(),
+        departmentName: department?.name || null,
+      };
+    }
+  }
+
+  return {
+    ...user.toJSON(),
+    roleDetails,
+  };
+};
+
+//*Forgot Password (Send OTP)
 export const forgotPassword = async (email: string) => {
   const user = await User.findOne({ where: { email } });
-  if (!user) throw new Error("User not found");
+  if (!user) return { message: "User not found" };
 
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
@@ -226,11 +300,11 @@ export const resetPassword = async (
   newPassword: string
 ) => {
   const user = await User.findOne({ where: { email } });
-  if (!user) throw new Error("User not found");
+  if (!user) return { message: "User not found" };
 
-  if (user.resetOtp !== otp) throw new Error("Invalid OTP");
+  if (user.resetOtp !== otp) return { message: "Invalid OTP" };
   if (!user.resetOtpExpiry || user.resetOtpExpiry < new Date())
-    throw new Error("OTP expired");
+    return { message: "OTP expired" };
 
   // Hash new password
   const hashedPassword = await bcrypt.hash(newPassword, 10);

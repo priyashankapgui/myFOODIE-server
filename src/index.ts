@@ -6,6 +6,7 @@ import path from "path";
 import sequelize from "./config/db";
 import "./models";
 import routes from "./routes";
+import "./jobs/foodItemScheduler";
 
 const app = express();
 const PORT = Number(process.env.PORT) || 8000;

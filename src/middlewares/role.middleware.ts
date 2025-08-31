@@ -11,7 +11,7 @@ export const authorizeRoles = (...allowedRoles: string[]) => {
     }
 
     if (!allowedRoles.includes(user.role)) {
-      res.status(403).json({ error: "Forbidden: Insufficient role" });
+      res.status(403).json({ error: "Insufficient role" });
       return;
     }
 

@@ -62,7 +62,7 @@ User.init(
       unique: true,
     },
     resetOtp: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(7),
       allowNull: true,
     },
     resetOtpExpiry: {

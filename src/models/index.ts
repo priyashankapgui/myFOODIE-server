@@ -14,58 +14,169 @@ import Transaction from "./transaction";
 User.hasOne(MgmtEmp, {
   foreignKey: "userId",
   as: "managementEmployee",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
-MgmtEmp.belongsTo(User, { foreignKey: "userId", as: "user" });
+MgmtEmp.belongsTo(User, {
+  foreignKey: "userId",
+  as: "user",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
 
 //nomalEmp and user are one to one relationship
-User.hasOne(NomalEmp, { foreignKey: "userId", as: "normalEmployee" });
-NomalEmp.belongsTo(User, { foreignKey: "userId", as: "user" });
+User.hasOne(NomalEmp, {
+  foreignKey: "userId",
+  as: "normalEmployee",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+NomalEmp.belongsTo(User, {
+  foreignKey: "userId",
+  as: "user",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
 
 //department and nomalEmp are one to many relationship
 Department.hasMany(NomalEmp, {
   foreignKey: "departmentId",
   as: "normalEmployees",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 NomalEmp.belongsTo(Department, {
   foreignKey: "departmentId",
   as: "department",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 //supplyer and user are one to one relationship
-User.hasOne(Supplyer, { foreignKey: "userId", as: "supplyer" });
-Supplyer.belongsTo(User, { foreignKey: "userId", as: "user" });
+User.hasOne(Supplyer, {
+  foreignKey: "userId",
+  as: "supplyer",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+Supplyer.belongsTo(User, {
+  foreignKey: "userId",
+  as: "user",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
 
 //user and order are one to many relationship
-User.hasMany(Order, { foreignKey: "userId", as: "orders" });
-Order.belongsTo(User, { foreignKey: "userId", as: "user" });
+User.hasMany(Order, {
+  foreignKey: "userId",
+  as: "orders",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+Order.belongsTo(User, {
+  foreignKey: "userId",
+  as: "user",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
 
 //supplyer and foodItem are one to many relationship
-Supplyer.hasMany(FoodItem, { foreignKey: "supplierId", as: "foodItems" });
-FoodItem.belongsTo(Supplyer, { foreignKey: "supplierId", as: "supplier" });
+Supplyer.hasMany(FoodItem, {
+  foreignKey: "supplierId",
+  as: "foodItems",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+FoodItem.belongsTo(Supplyer, {
+  foreignKey: "supplierId",
+  as: "supplier",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
 
 //order and foodItem are many to one relationship
-FoodItem.hasMany(Order, { foreignKey: "foodId", as: "orders" });
-Order.belongsTo(FoodItem, { foreignKey: "foodId", as: "foodItem" });
+FoodItem.hasMany(Order, {
+  foreignKey: "foodId",
+  as: "orders",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+Order.belongsTo(FoodItem, {
+  foreignKey: "foodId",
+  as: "foodItem",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
 
 //order and employee are one to one relationship
-Order.hasOne(User, { foreignKey: "userId", as: "employee" });
-User.belongsTo(Order, { foreignKey: "userId", as: "order" });
+Order.hasOne(User, {
+  foreignKey: "userId",
+  as: "employee",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+User.belongsTo(Order, {
+  foreignKey: "userId",
+  as: "order",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
 
 //order and department are one to many relationship
-Department.hasMany(Order, { foreignKey: "departmentId", as: "orders" });
-Order.belongsTo(Department, { foreignKey: "departmentId", as: "department" });
+Department.hasMany(Order, {
+  foreignKey: "departmentId",
+  as: "orders",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+Order.belongsTo(Department, {
+  foreignKey: "departmentId",
+  as: "department",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
 
 //order and orderItem are one to many relationship
-Order.hasMany(OrderItem, { foreignKey: "orderId", as: "orderItems" });
-OrderItem.belongsTo(Order, { foreignKey: "orderId", as: "order" });
+Order.hasMany(OrderItem, {
+  foreignKey: "orderId",
+  as: "orderItems",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+OrderItem.belongsTo(Order, {
+  foreignKey: "orderId",
+  as: "order",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
 
 //foodItem and orderItem are one to many relationship
-FoodItem.hasMany(OrderItem, { foreignKey: "foodItemId", as: "orderItems" });
-OrderItem.belongsTo(FoodItem, { foreignKey: "foodItemId", as: "foodItem" });
+FoodItem.hasMany(OrderItem, {
+  foreignKey: "foodItemId",
+  as: "orderItems",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+OrderItem.belongsTo(FoodItem, {
+  foreignKey: "foodItemId",
+  as: "foodItem",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
 
 //user and orderItem are one to many relationship
-User.hasMany(OrderItem, { foreignKey: "userId", as: "orderItems" });
-OrderItem.belongsTo(User, { foreignKey: "userId", as: "user" });
+User.hasMany(OrderItem, {
+  foreignKey: "userId",
+  as: "orderItems",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+OrderItem.belongsTo(User, {
+  foreignKey: "userId",
+  as: "user",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
 
 //user and feedback are one to many relationship
 User.hasMany(Feedback, { foreignKey: "userId", as: "feedbacks" });
@@ -75,20 +186,57 @@ Feedback.belongsTo(User, { foreignKey: "userId", as: "user" });
 Supplyer.hasMany(OrderSummary, {
   foreignKey: "supplierId",
   as: "orderSummaries",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
-OrderSummary.belongsTo(Supplyer, { foreignKey: "supplierId", as: "supplier" });
+OrderSummary.belongsTo(Supplyer, {
+  foreignKey: "supplierId",
+  as: "supplier",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
 
 //supplyer and feedback are one to many relationship
-Supplyer.hasMany(Feedback, { foreignKey: "supplierId", as: "feedbacks" });
-Feedback.belongsTo(Supplyer, { foreignKey: "supplierId", as: "supplier" });
+Supplyer.hasMany(Feedback, {
+  foreignKey: "supplierId",
+  as: "feedbacks",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+Feedback.belongsTo(Supplyer, {
+  foreignKey: "supplierId",
+  as: "supplier",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
 
 //supplyer and  order are one to many relationship
-Supplyer.hasMany(Order, { foreignKey: "supplierId", as: "orders" });
-Order.belongsTo(Supplyer, { foreignKey: "supplierId", as: "supplier" });
+Supplyer.hasMany(Order, {
+  foreignKey: "supplierId",
+  as: "orders",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+Order.belongsTo(Supplyer, {
+  foreignKey: "supplierId",
+  as: "supplier",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
 
 //user and transaction are one to many relationship
-User.hasMany(Transaction, { foreignKey: "supplyerId", as: "transactions" });
-Transaction.belongsTo(Supplyer, { foreignKey: "supplyerId", as: "supplier" });
+User.hasMany(Transaction, {
+  foreignKey: "supplyerId",
+  as: "transactions",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+Transaction.belongsTo(Supplyer, {
+  foreignKey: "supplyerId",
+  as: "supplier",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
 
 export {
   User,
