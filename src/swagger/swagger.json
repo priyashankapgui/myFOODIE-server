@@ -7,16 +7,130 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8000"
+      "url": "http://localhost:8000/api"
     }
   ],
   "paths": {
-    "/": {
-      "get": {
-        "summary": "Root endpoint",
+    "/auth/signup": {
+      "post": {
+        "summary": "User Signup",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "email": { "type": "string", "format": "email" },
+                  "password": { "type": "string" },
+                  "gender": {
+                    "type": "string",
+                    "enum": ["male", "female", "other"]
+                  },
+                  "role": {
+                    "type": "string",
+                    "enum": ["management", "normalEmployee", "supplier"]
+                  },
+                  "position": { "type": "string" },
+                  "departmentId": { "type": "integer" },
+                  "foodType": { "type": "string" },
+                  "address": { "type": "string" },
+                  "phone": { "type": "string" }
+                },
+                "required": ["name", "email", "password", "gender", "role"]
+              },
+              "example": {
+                "name": "Alice Manager",
+                "email": "alice@myfoodie.com",
+                "password": "password123",
+                "gender": "female",
+                "role": "management",
+                "position": "Operations Head"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Signup successful",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/User" }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation or duplicate error"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "User Login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string" },
+                  "password": { "type": "string" }
+                },
+                "required": ["email", "password"]
+              },
+              "example": {
+                "email": "alice@myfoodie.com",
+                "password": "password123"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Login successful, returns token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": { "type": "string" },
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "summary": "User Logout",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "User ID to logout"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logout successful"
+          },
+          "404": {
+            "description": "User not found"
           }
         }
       }
