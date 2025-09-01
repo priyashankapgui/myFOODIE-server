@@ -76,6 +76,8 @@ export const calculateTobePaidValues = async (
 //? This function checks if a status transition is allowed based on the current and new status.
 //? pending -> prepared, cancelled
 //? prepared -> completed, non-completed, cancelled
+//? prepared -> collected
+//? collected -> completed,non-completed
 //? completed -> (no further transitions)
 //? non-completed -> (no further transitions)
 //? cancelled -> (no further transitions)
@@ -85,8 +87,9 @@ export const isValidStatusTransition = (
   newStatus: string
 ): boolean => {
   const allowedTransitions: { [key: string]: string[] } = {
-    pending: ["prepared", "cancelled"],
-    prepared: ["completed", "non-completed", "cancelled"],
+    pending: ["prepared"],
+    prepared: ["collected"],
+    collected: ["completed", "non-completed"],
     completed: [],
     "non-completed": [],
     cancelled: [],

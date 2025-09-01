@@ -36,11 +36,33 @@ export const getById = async (req: Request, res: Response) => {
   }
 };
 
+export const getByUser = async (req: Request, res: Response) => {
+  console.log("Fetching orders for user:", req.params.userId);
+  try {
+    const orders = await orderService.getOrdersByUser(req.params.userId);
+    res.status(200).json(orders);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching orders", error });
+  }
+};
+
 // Get orders by department
 export const getByDepartment = async (req: Request, res: Response) => {
   try {
     const orders = await orderService.getOrdersByDepartment(
       req.params.departmentId
+    );
+    res.status(200).json(orders);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching orders", error });
+  }
+};
+
+//Get Order by Supplier
+export const getBySupplier = async (req: Request, res: Response) => {
+  try {
+    const orders = await orderService.getOrdersBySupplier(
+      req.params.supplierId
     );
     res.status(200).json(orders);
   } catch (error) {
@@ -71,6 +93,7 @@ export const updateStatus = async (req: Request, res: Response) => {
     const updatedOrder = await orderService.updateOrderStatus(
       req.params.id,
       req.body.status,
+      req.body.collectedByUserId,
       req.body.receivedItems
     );
     if (!updatedOrder) {

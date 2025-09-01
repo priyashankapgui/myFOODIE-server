@@ -24,6 +24,7 @@ export const updateOrderStatusSchema = z.object({
   status: z.enum([
     "pending",
     "prepared",
+    "collected",
     "completed",
     "non-completed",
     "cancelled",

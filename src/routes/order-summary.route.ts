@@ -25,6 +25,13 @@ router.get(
   orderSummaryController.getMonthlySummary
 );
 
+//Get monthly All order summary
+router.get(
+  "/totals/monthly/",
+  authorizeRoles("management"),
+  orderSummaryController.getMonthlyAllOrdersSummary
+);
+
 // Get yearly order summary
 router.get(
   "/yearly/:supplierId/:year",

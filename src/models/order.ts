@@ -102,7 +102,14 @@ Order.init(
       defaultValue: "pending",
       validate: {
         isIn: [
-          ["pending", "prepared", "completed", "non-completed", "cancelled"],
+          [
+            "pending",
+            "prepared",
+            "collected",
+            "completed",
+            "non-completed",
+            "cancelled",
+          ],
         ],
       },
     },

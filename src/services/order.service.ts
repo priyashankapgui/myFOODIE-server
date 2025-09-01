@@ -9,6 +9,7 @@ import {
 import { generateOrderId } from "../utils/genaretedId";
 import { FoodItem } from "../models";
 import { updateMonthlySummary } from "./order-summary.service";
+import { Op } from "sequelize";
 
 // Create a new order
 export const createOrder = async (orderData: any, orderItems: any[]) => {
@@ -53,16 +54,35 @@ export const createOrder = async (orderData: any, orderItems: any[]) => {
 // Get all orders with their items
 export const getAllOrders = async () => {
   return await Order.findAll({
-    include: [{ model: OrderItem, as: "items" }],
+    include: [{ model: OrderItem, as: "orderItems" }],
   });
 };
 
 // Get order by ID
 export const getOrderById = async (id: string) => {
-  const order = await Order.findByPk(id, {
-    include: [{ model: OrderItem, as: "items" }],
+  return await Order.findByPk(id, {
+    include: [{ model: OrderItem, as: "orderItems" }],
   });
-  return order;
+};
+
+export const getOrdersByUser = async (userId: string) => {
+  return await Order.findAll({
+    where: {
+      orderCreatorUserId: userId,
+      status: {
+        [Op.in]: ["pending", "prepared", "collected", "non-completed"],
+      },
+    },
+    include: [{ model: OrderItem, as: "orderItems" }],
+  });
+};
+
+//Get Order By Supplier
+export const getOrdersBySupplier = async (supplierId: string) => {
+  return await Order.findAll({
+    where: { supplierId },
+    include: [{ model: OrderItem, as: "orderItems" }],
+  });
 };
 
 // Get orders by department
@@ -109,6 +129,7 @@ export const updateOrder = async (id: string, data: any) => {
 export const updateOrderStatus = async (
   id: string,
   status: string,
+  collectedByUserId: string,
   receivedItems: Array<{
     orderItemId: number;
     receivedQuantity: number;
@@ -119,6 +140,7 @@ export const updateOrderStatus = async (
     orderId: id,
     status,
     receivedItems,
+    collectedByUserId,
   });
 
   try {
@@ -146,7 +168,13 @@ export const updateOrderStatus = async (
     });
 
     // Handle different status updates
-    if (status === "completed") {
+
+    if (status === "collected") {
+      await order.update(
+        { status, collectedByUserId: collectedByUserId },
+        { transaction }
+      );
+    } else if (status === "completed") {
       await order.update(
         {
           status,

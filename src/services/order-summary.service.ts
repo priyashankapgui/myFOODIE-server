@@ -7,6 +7,7 @@ import {
   getSummaryForPeriod as getSummaryForPeriodUtil,
 } from "../utils/orderSummaryCalculation";
 import { OrderSummary as OrderSummaryType } from "../types/orderSummary";
+import Order from "../models/order";
 import { Op } from "sequelize";
 
 /**
@@ -166,4 +167,52 @@ export const updateMonthlySummary = async (
   await updateMonthlySummaryUtil(supplierId, orderDate);
 };
 
-// Export all functions as named exports
+// Add to services/orderSummaryService.ts
+export const getMonthlyAllOrdersSummary =
+  async (): Promise<OrderSummaryType> => {
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endOfMonth = new Date(
+      now.getFullYear(),
+      now.getMonth() + 1,
+      0,
+      23,
+      59,
+      59
+    );
+
+    // Get all orders for this month regardless of supplier
+    const orders = await Order.findAll({
+      where: {
+        orderDate: {
+          [Op.between]: [startOfMonth, endOfMonth],
+        },
+        status: {
+          [Op.in]: ["completed", "non-completed"],
+        },
+      },
+    });
+
+    // Calculate totals from all orders
+    return {
+      id: 0,
+      monthlyTotalOrders: orders.length,
+      monthlyTotalItems: orders.reduce(
+        (sum, order) => sum + (order.totalPreparedOrderItems || 0),
+        0
+      ),
+      monthlyTotalPrice: orders.reduce(
+        (sum, order) => sum + (order.toBePaidTotalPrice || 0),
+        0
+      ),
+      monthlyTotalEmployeePrice: orders.reduce(
+        (sum, order) => sum + (order.toBePaidEmployeePrice || 0),
+        0
+      ),
+      monthlyTotalHospitalPrice: orders.reduce(
+        (sum, order) => sum + (order.toBePaidHospitalPrice || 0),
+        0
+      ),
+      supplierId: "all",
+    };
+  };

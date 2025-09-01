@@ -1,27 +1,13 @@
 // controllers/orderSummary.controller.ts
 import { Request, Response } from "express";
-import {
-  getAllOrderSummaries,
-  getOrderSummariesBySupplier,
-  getMonthlyOrderSummary,
-  getYearlyOrderSummary,
-  getQuarterlyOrderSummary,
-  recalculateMonthlySummary,
-  deleteOrderSummary,
-  getSummaryForPeriod,
-} from "../services/order-summary.service";
+import * as OrderSummaryService from "../services/order-summary.service";
 
 // Get all order summaries with pagination
 export const getAll = async (req: Request, res: Response) => {
   try {
-    const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 10;
-
-    const result = await getAllOrderSummaries(page, limit);
+    const result = await OrderSummaryService.getAllOrderSummaries();
     res.status(200).json({
       summaries: result.summaries,
-      currentPage: page,
-      totalPages: Math.ceil(result.totalCount / limit),
       totalCount: result.totalCount,
     });
   } catch (error) {
@@ -32,7 +18,9 @@ export const getAll = async (req: Request, res: Response) => {
 // Get order summaries by supplier
 export const getBySupplier = async (req: Request, res: Response) => {
   try {
-    const summaries = await getOrderSummariesBySupplier(req.params.supplierId);
+    const summaries = await OrderSummaryService.getOrderSummariesBySupplier(
+      req.params.supplierId
+    );
     res.status(200).json(summaries);
   } catch (error) {
     res.status(500).json({ message: "Error fetching order summaries", error });
@@ -44,7 +32,7 @@ export const getMonthlySummary = async (req: Request, res: Response) => {
   try {
     const { supplierId, year, month } = req.params;
 
-    const summary = await getMonthlyOrderSummary(
+    const summary = await OrderSummaryService.getMonthlyOrderSummary(
       supplierId,
       parseInt(year),
       parseInt(month)
@@ -66,7 +54,10 @@ export const getYearlySummary = async (req: Request, res: Response) => {
   try {
     const { supplierId, year } = req.params;
 
-    const summary = await getYearlyOrderSummary(supplierId, parseInt(year));
+    const summary = await OrderSummaryService.getYearlyOrderSummary(
+      supplierId,
+      parseInt(year)
+    );
 
     res.status(200).json(summary);
   } catch (error) {
@@ -79,7 +70,7 @@ export const getQuarterlySummary = async (req: Request, res: Response) => {
   try {
     const { supplierId, year, quarter } = req.params;
 
-    const summary = await getQuarterlyOrderSummary(
+    const summary = await OrderSummaryService.getQuarterlyOrderSummary(
       supplierId,
       parseInt(year),
       parseInt(quarter)
@@ -98,7 +89,7 @@ export const recalculateMonthly = async (req: Request, res: Response) => {
   try {
     const { supplierId, year, month } = req.params;
 
-    const summary = await recalculateMonthlySummary(
+    const summary = await OrderSummaryService.recalculateMonthlySummary(
       supplierId,
       parseInt(year),
       parseInt(month)
@@ -116,7 +107,9 @@ export const recalculateMonthly = async (req: Request, res: Response) => {
 // Delete order summary
 export const deleteSummary = async (req: Request, res: Response) => {
   try {
-    const success = await deleteOrderSummary(parseInt(req.params.id));
+    const success = await OrderSummaryService.deleteOrderSummary(
+      parseInt(req.params.id)
+    );
 
     if (!success) {
       res.status(404).json({ message: "Order summary not found" });
@@ -140,7 +133,7 @@ export const getCustomPeriodSummary = async (req: Request, res: Response) => {
       return;
     }
 
-    const summary = await getSummaryForPeriod(
+    const summary = await OrderSummaryService.getSummaryForPeriod(
       supplierId,
       new Date(startDate),
       new Date(endDate)
@@ -151,5 +144,20 @@ export const getCustomPeriodSummary = async (req: Request, res: Response) => {
     res
       .status(500)
       .json({ message: "Error fetching custom period summary", error });
+  }
+};
+
+export const getMonthlyAllOrdersSummary = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const summary = await OrderSummaryService.getMonthlyAllOrdersSummary();
+
+    res.status(200).json(summary);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching monthly total orders summary", error });
   }
 };

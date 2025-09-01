@@ -18,14 +18,16 @@ router.post(
   validate(createOrderSchema),
   orderController.create
 );
+router.get("/userid/:userId", orderController.getByUser);
 router.get("/", orderController.getAll);
-router.get("/getorderById/:id", orderController.getById);
+router.get("/orderid/:id", orderController.getById);
 router.put(
   "/updateOrder/:id",
   authorizeRoles("management", "normalEmployee"),
   validate(updateOrderSchema),
   orderController.update
 );
+router.get("/supplier/:supplierId", orderController.getBySupplier);
 router.put(
   "/updateOrderStatus/:id",
   validate(updateOrderStatusSchema),
