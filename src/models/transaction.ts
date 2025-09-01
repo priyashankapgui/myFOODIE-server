@@ -9,7 +9,7 @@ class Transaction
   implements TransactionAttributes
 {
   public id!: string;
-  public supplyerId!: string;
+  public supplierId!: string;
   public monthlyAmount!: number;
   public paymentStatus!: string;
   public transactionDate!: Date;
@@ -33,7 +33,7 @@ Transaction.init(
       allowNull: true,
       defaultValue: "credit_card",
     },
-    supplyerId: {
+    supplierId: {
       type: DataTypes.STRING(36),
       allowNull: false,
     },

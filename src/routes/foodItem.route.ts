@@ -14,18 +14,24 @@ router.use(authenticate);
 router.post(
   "/",
   validate(createFoodItemSchema),
-  authorizeRoles("supplyer"),
+  authorizeRoles("supplier"),
   foodItemController.create
 );
-router.get("/", foodItemController.getAll);
+router.get("/", authorizeRoles("management"), foodItemController.getAll);
 router.get("/supplier/:supplierId", foodItemController.getBySupplierId);
-router.get("/:id", foodItemController.getById);
+router.get("/:id", foodItemController.getSingleFoodItem);
+router.get("/foods/todayspecials", foodItemController.getTodaySpecial);
+router.get(
+  "/user/departmentUser/:departmentId",
+  foodItemController.getDepartmentUser
+);
+
 router.put(
   "/:id",
   validate(updateFoodItemSchema),
-  authorizeRoles("supplyer"),
+  authorizeRoles("supplier"),
   foodItemController.update
 );
-router.delete("/:id", authorizeRoles("supplyer"), foodItemController.remove);
+router.delete("/:id", authorizeRoles("supplier"), foodItemController.remove);
 
 export default router;

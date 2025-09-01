@@ -4,7 +4,7 @@ import User from "../models/user";
 import MgmtEmp from "../models/management-employee";
 import NormalEmp from "../models/nomal-employee";
 import Department from "../models/department";
-import Supplyer from "../models/supplyer";
+import Supplier from "../models/supplier";
 import { UserAttributes } from "../types/user";
 import {
   generateUserId,
@@ -25,7 +25,7 @@ export const signup = async (
     foodType?: string;
     address?: string;
     phone?: string;
-    role: "management" | "normalEmployee" | "supplyer";
+    role: "management" | "normalEmployee" | "supplier";
   }
 ) => {
   const t = await sequelize.transaction();
@@ -71,6 +71,7 @@ export const signup = async (
             id: managementId,
             userId: newUser.id,
             position: userData.position,
+            departmentId: userData.departmentId || 0,
           },
           { transaction: t }
         );
@@ -93,13 +94,13 @@ export const signup = async (
         );
         break;
 
-      case "supplyer":
+      case "supplier":
         if (!userData.foodType || !userData.address || !userData.phone)
           throw new Error(
-            "FoodType, Address, and Phone are required for supplyer"
+            "FoodType, Address, and Phone are required for supplier"
           );
         const supplierId = await generateSupplierId();
-        await Supplyer.create(
+        await Supplier.create(
           {
             id: supplierId,
             userId: newUser.id,
@@ -134,27 +135,43 @@ export const login = async (email: string, password: string) => {
   if (!isMatch) throw new Error("Invalid credentials");
 
   let roleId: string | null = null;
+  let departmentId: string | null = null;
 
-  // Check which type of user and get roleId
-  if (user.role === "supplyer") {
-    const supplier = await Supplyer.findOne({ where: { userId: user.id } });
+  // Check which type of user and get roleId + departmentId
+  if (user.role === "supplier") {
+    const supplier = await Supplier.findOne({ where: { userId: user.id } });
     roleId = supplier?.id || null;
   } else if (user.role === "management") {
     const managementEmp = await MgmtEmp.findOne({ where: { userId: user.id } });
     roleId = managementEmp?.id || null;
+    departmentId =
+      managementEmp?.departmentId !== undefined &&
+      managementEmp?.departmentId !== null
+        ? String(managementEmp.departmentId)
+        : null;
   } else if (user.role === "normalEmployee") {
     const employee = await NormalEmp.findOne({ where: { userId: user.id } });
     roleId = employee?.id || null;
+    departmentId =
+      employee?.departmentId !== undefined && employee?.departmentId !== null
+        ? String(employee.departmentId)
+        : null;
   }
 
-  console.log("User role:", user.role, "Role ID:", roleId);
+  console.log(
+    "User role:",
+    user.role,
+    "Role ID:",
+    roleId,
+    "Department ID:",
+    departmentId
+  );
 
   if (!roleId) {
     throw new Error("Role ID not found for user");
   }
 
   //* This is the payload for the JWT token
-  //* Token  has the three parts: Header, Payload, Signature
   const token = jwt.sign(
     {
       id: user.id,
@@ -177,7 +194,8 @@ export const login = async (email: string, password: string) => {
       name: user.name,
       email: user.email,
       role: user.role,
-      roleId: roleId,
+      roleId,
+      departmentId,
     },
   };
 };
@@ -197,24 +215,24 @@ export const updateUserById = async (userId: string, updates: any) => {
 
   let updatedRoleDetails = null;
 
-  if (user.role === "supplyer") {
+  if (user.role === "supplier") {
     // Allow only phone and address updates for suppliers
     const { phone, address } = updates;
 
-    updatedRoleDetails = await Supplyer.update(
+    updatedRoleDetails = await Supplier.update(
       { phone, address },
       { where: { userId }, returning: true }
     );
 
     // return updated details
-    const supplyer = await Supplyer.findOne({
+    const supplier = await Supplier.findOne({
       where: { userId },
       attributes: ["id", "foodType", "address", "phone"],
     });
 
     return {
       ...user.toJSON(),
-      roleDetails: supplyer,
+      roleDetails: supplier,
     };
   }
   if (user.role === "management") {
@@ -247,8 +265,8 @@ export const getUserById = async (userId: string) => {
       where: { userId },
       attributes: ["id", "position"],
     });
-  } else if (user.role === "supplyer") {
-    roleDetails = await Supplyer.findOne({
+  } else if (user.role === "supplier") {
+    roleDetails = await Supplier.findOne({
       where: { userId },
       attributes: ["id", "foodType", "address", "phone"],
     });

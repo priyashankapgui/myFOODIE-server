@@ -1,6 +1,6 @@
 export interface TransactionAttributes {
   id: string;
-  supplyerId: string;
+  supplierId: string;
   transactionDate: Date;
   monthlyAmount: number;
   paymentStatus: string;

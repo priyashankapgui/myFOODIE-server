@@ -1,5 +1,5 @@
 import User from "../models/user";
-import Supplyer from "../models/supplyer";
+import Supplier from "../models/supplier";
 import MgmtEmp from "../models/management-employee";
 import NomalEmp from "../models/nomal-employee";
 import Order from "../models/order";
@@ -24,7 +24,7 @@ export const generateUserId = async (): Promise<string> => {
 
 //* Supplier ID generation
 export const generateSupplierId = async (): Promise<string> => {
-  const lastSupplier = await Supplyer.findOne({
+  const lastSupplier = await Supplier.findOne({
     order: [["createdAt", "DESC"]],
   });
 

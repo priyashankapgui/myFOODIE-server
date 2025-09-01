@@ -9,9 +9,11 @@ class MgmtEmp
   extends Model<MgmtEmployeeAttributes, MgmtEmpCreationAttributes>
   implements MgmtEmployeeAttributes
 {
+  [x: string]: any;
   public id!: string;
   public userId!: string;
   public position!: string;
+  public departmentId!: number;
 }
 
 MgmtEmp.init(
@@ -28,6 +30,10 @@ MgmtEmp.init(
     },
     position: {
       type: DataTypes.STRING(100),
+      allowNull: false,
+    },
+    departmentId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
   },

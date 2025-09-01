@@ -30,7 +30,7 @@
                   },
                   "role": {
                     "type": "string",
-                    "enum": ["management", "normalEmployee", "supplyer"]
+                    "enum": ["management", "normalEmployee", "supplier"]
                   },
                   "position": { "type": "string" },
                   "departmentId": { "type": "integer" },

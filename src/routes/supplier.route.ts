@@ -1,7 +1,7 @@
 import { Router } from "express";
-import * as supplierController from "../controllers/supplyer.controller";
+import * as supplierController from "../controllers/supplier.controller";
 import { validate } from "../middlewares/validate.middleware";
-import { updateSupplierSchema } from "../validation/suppliyer.schema";
+import { updateSupplierSchema } from "../validation/supplier.schema";
 import { authenticate } from "../middlewares/auth.middleware";
 import { authorizeRoles } from "../middlewares/role.middleware";
 

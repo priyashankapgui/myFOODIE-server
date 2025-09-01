@@ -2,7 +2,7 @@ import express from "express";
 import authRoutes from "./auth.route";
 import departmentRoutes from "./department.route";
 import feedbackRoutes from "./feedback.route";
-import supplierRoutes from "./supplyer.route";
+import supplierRoutes from "./supplier.route";
 import foodItemRoutes from "./foodItem.route";
 import managmentEmpRoutes from "./management-employee.route";
 import nomalEmpRoutes from "./nomal-employee.route";

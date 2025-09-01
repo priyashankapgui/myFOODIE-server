@@ -1,12 +1,12 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/db";
-import { SupplyerAttributes } from "../types/supplyer";
+import { SupplierAttributes } from "../types/supplier";
 
-interface SupplyerCreationAttributes
-  extends Optional<SupplyerAttributes, "id"> {}
-class Supplyer
-  extends Model<SupplyerAttributes, SupplyerCreationAttributes>
-  implements SupplyerAttributes
+interface SupplierCreationAttributes
+  extends Optional<SupplierAttributes, "id"> {}
+class Supplier
+  extends Model<SupplierAttributes, SupplierCreationAttributes>
+  implements SupplierAttributes
 {
   [x: string]: any;
   public id!: string;
@@ -15,7 +15,7 @@ class Supplyer
   public address!: string;
   public phone!: string;
 }
-Supplyer.init(
+Supplier.init(
   {
     id: {
       type: DataTypes.STRING(36),
@@ -46,9 +46,9 @@ Supplyer.init(
   },
   {
     sequelize,
-    tableName: "supplyers",
-    modelName: "Supplyer",
+    tableName: "suppliers",
+    modelName: "Supplier",
     timestamps: true,
   }
 );
-export default Supplyer;
+export default Supplier;

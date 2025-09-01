@@ -1,4 +1,4 @@
-export interface SupplyerAttributes {
+export interface SupplierAttributes {
   id?: string;
   userId: string;
   foodType: string;

@@ -1,14 +1,14 @@
-import Supplyer from "../models/supplyer";
+import Supplier from "../models/supplier";
 import User from "../models/user";
 import bcrypt from "bcryptjs";
 
-export const createSupplyer = async (data: any) => {
+export const createSupplier = async (data: any) => {
   console.log("Creating supplier with data:", data);
-  return await Supplyer.create(data);
+  return await Supplier.create(data);
 };
 
-export const getAllSupplyers = async () => {
-  const suppliers = await Supplyer.findAll({
+export const getAllSuppliers = async () => {
+  const suppliers = await Supplier.findAll({
     include: [
       {
         model: User,
@@ -27,8 +27,8 @@ export const getAllSupplyers = async () => {
   }));
 };
 
-export const getSupplyerById = async (id: string) => {
-  const supplier: any = await Supplyer.findByPk(id, {
+export const getSupplierById = async (id: string) => {
+  const supplier: any = await Supplier.findByPk(id, {
     include: [
       {
         model: User,
@@ -49,12 +49,12 @@ export const getSupplyerById = async (id: string) => {
   };
 };
 
-export const updateSupplyer = async (id: string, data: any) => {
-  const transaction = await Supplyer.sequelize?.transaction();
+export const updateSupplier = async (id: string, data: any) => {
+  const transaction = await Supplier.sequelize?.transaction();
 
   try {
-    const supplyer = await Supplyer.findByPk(id, { transaction });
-    if (!supplyer) {
+    const supplier = await Supplier.findByPk(id, { transaction });
+    if (!supplier) {
       await transaction?.rollback();
       return null;
     }
@@ -63,11 +63,11 @@ export const updateSupplyer = async (id: string, data: any) => {
     const { user: userData, ...supplierData } = data;
 
     // Update supplier
-    await supplyer.update(supplierData, { transaction });
+    await supplier.update(supplierData, { transaction });
 
     // Update user if data provided
     if (userData) {
-      const user = await User.findByPk(supplyer.userId, { transaction });
+      const user = await User.findByPk(supplier.userId, { transaction });
       if (!user) {
         await transaction?.rollback();
         return null;
@@ -82,7 +82,7 @@ export const updateSupplyer = async (id: string, data: any) => {
 
     await transaction?.commit();
 
-    const updatedSupplier: any = await Supplyer.findByPk(id, {
+    const updatedSupplier: any = await Supplier.findByPk(id, {
       include: [
         {
           model: User,
@@ -104,22 +104,22 @@ export const updateSupplyer = async (id: string, data: any) => {
   }
 };
 
-export const deleteSupplyer = async (id: string) => {
-  const transaction = await Supplyer.sequelize?.transaction();
+export const deleteSupplier = async (id: string) => {
+  const transaction = await Supplier.sequelize?.transaction();
 
   try {
-    const supplyer = await Supplyer.findByPk(id, { transaction });
+    const supplier = await Supplier.findByPk(id, { transaction });
 
-    if (!supplyer) {
+    if (!supplier) {
       await transaction?.rollback();
       return false;
     }
     await User.destroy({
-      where: { id: supplyer.userId },
+      where: { id: supplier.userId },
       transaction,
     });
 
-    await supplyer.destroy({ transaction });
+    await supplier.destroy({ transaction });
 
     await transaction?.commit();
     console.log("Deleted Successfully");

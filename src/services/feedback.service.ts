@@ -1,6 +1,6 @@
 import Feedback from "../models/feedback";
 import { FeedbackAttributes } from "../types/feedback";
-import Supplier from "../models/supplyer";
+import Supplier from "../models/supplier";
 import User from "../models/user";
 
 // Create a new feedback
@@ -42,6 +42,6 @@ export const getFeedbackById = async (id: string) => {
 
   return {
     ...feedback,
-    supplierName: feedback.supplyer?.user?.name,
+    supplierName: feedback.supplier?.user?.name,
   };
 };

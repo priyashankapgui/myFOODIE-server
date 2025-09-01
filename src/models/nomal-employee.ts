@@ -8,6 +8,7 @@ class NomalEmp
   extends Model<NomalEmployeeAttributes, NomalEmpCreationAttributes>
   implements NomalEmployeeAttributes
 {
+  [x: string]: any;
   public id!: string;
   public userId!: string;
   public departmentId!: number;
