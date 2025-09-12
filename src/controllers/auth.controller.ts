@@ -69,6 +69,7 @@ export const resetPassword = async (req: Request, res: Response) => {
 //* Update User by ID
 export const updateUserById = async (req: Request, res: Response) => {
   try {
+    console.log(req.body);
     const userId = (req as any).user.id;
     const result = await AuthService.updateUserById(userId, req.body);
     res.json(result);

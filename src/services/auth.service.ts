@@ -194,6 +194,7 @@ export const login = async (email: string, password: string) => {
       name: user.name,
       email: user.email,
       role: user.role,
+      imageUrl: user.imageUrl,
       roleId,
       departmentId,
     },
@@ -210,8 +211,13 @@ export const logout = async (userId: string) => {
 
 //* Update user service function
 export const updateUserById = async (userId: string, updates: any) => {
+  console.log("Updates received:⚠️", updates);
   const user = await User.findByPk(userId);
   if (!user) return { message: "User not found" };
+
+  // Update User fields
+  const { name, email, gender, imageUrl } = updates;
+  await user.update({ name, email, gender, imageUrl });
 
   let updatedRoleDetails = null;
 
@@ -335,3 +341,7 @@ export const resetPassword = async (
 
   return { message: "Password reset successful" };
 };
+
+//*NOTE: JWT Token has the two parts - Header and Payload
+//* Header contains the type of token and the signing algorithm
+//* Payload contains the user data (id, email, role) and the token expiry info
