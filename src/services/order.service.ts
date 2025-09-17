@@ -1,5 +1,6 @@
 import Order from "../models/order";
 import OrderItem from "../models/orderItems";
+import Department from "../models/department";
 import sequelize from "../config/db";
 import {
   calculateOrderTotals,
@@ -54,14 +55,28 @@ export const createOrder = async (orderData: any, orderItems: any[]) => {
 // Get all orders with their items
 export const getAllOrders = async () => {
   return await Order.findAll({
-    include: [{ model: OrderItem, as: "orderItems" }],
+    include: [
+      { model: OrderItem, as: "orderItems" },
+      {
+        model: Department,
+        as: "department",
+        attributes: ["name"],
+      },
+    ],
   });
 };
 
 // Get order by ID
 export const getOrderById = async (id: string) => {
   return await Order.findByPk(id, {
-    include: [{ model: OrderItem, as: "orderItems" }],
+    include: [
+      { model: OrderItem, as: "orderItems" },
+      {
+        model: Department,
+        as: "department",
+        attributes: ["name"],
+      },
+    ],
   });
 };
 
@@ -81,7 +96,14 @@ export const getOrdersByUser = async (userId: string) => {
 export const getOrdersBySupplier = async (supplierId: string) => {
   return await Order.findAll({
     where: { supplierId },
-    include: [{ model: OrderItem, as: "orderItems" }],
+    include: [
+      { model: OrderItem, as: "orderItems" },
+      {
+        model: Department,
+        as: "department",
+        attributes: ["name"],
+      },
+    ],
   });
 };
 

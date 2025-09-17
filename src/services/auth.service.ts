@@ -18,6 +18,8 @@ const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
 import sequelize from "../config/db";
 import { now } from "sequelize/types/utils";
 
+
+// Signup service function
 export const signup = async (
   userData: Partial<UserAttributes> & {
     position?: string;
@@ -209,7 +211,7 @@ export const logout = async (userId: string) => {
   await user.save();
 };
 
-//* Update user service function
+// Update user service function
 export const updateUserById = async (userId: string, updates: any) => {
   console.log("Updates received:⚠️", updates);
   const user = await User.findByPk(userId);
@@ -259,7 +261,7 @@ export const updateUserById = async (userId: string, updates: any) => {
   };
 };
 
-//* Get User by ID
+// Get User by ID
 export const getUserById = async (userId: string) => {
   const user = await User.findByPk(userId);
   if (!user) return { message: "User not found" };
@@ -299,7 +301,7 @@ export const getUserById = async (userId: string) => {
   };
 };
 
-//*Forgot Password (Send OTP)
+//Forgot Password (Send OTP)
 export const forgotPassword = async (email: string) => {
   const user = await User.findOne({ where: { email } });
   if (!user) return { message: "User not found" };

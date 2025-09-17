@@ -19,6 +19,7 @@ class FoodItem
   public category!: string;
   public imageUrl?: string;
   public available!: boolean;
+  public dietType?: string;
 }
 FoodItem.init(
   {
@@ -58,6 +59,14 @@ FoodItem.init(
     imageUrl: {
       type: DataTypes.STRING(255),
       allowNull: true,
+    },
+    dietType: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: "Non-Veg",
+      validate: {
+        isIn: [["Non-Veg", "Veg"]],
+      },
     },
     available: {
       type: DataTypes.BOOLEAN,

@@ -56,18 +56,27 @@ export const getAvailableFoodItemsByTime = async () => {
     let mealType: string;
 
     // Determine meal type based on current time
-    // if (currentHour >= 6 && currentHour < 11) {
+    // if (
+    //   (currentHour >= 21 && currentHour <= 23) ||
+    //   (currentHour >= 0 && currentHour < 1)
+    // ) {
     //   mealType = "breakfast";
-    // } else if (currentHour >= 11 && currentHour < 17) {
+    //   //? Breakfast → 9:00 PM (21) to 1:00 AM (01)
+    // } else if (currentHour >= 6 && currentHour < 9) {
     //   mealType = "lunch";
-    // } else if (currentHour >= 17 && currentHour < 21) {
+    //   //? Lunch → 6:00 AM (06) to 9:00 AM (09)
+    // } else if (currentHour >= 11 && currentHour < 15) {
     //   mealType = "dinner";
-    // } else if (currentHour >= 21 && currentHour < 23) {
+    //   //? Dinner → 11:00 AM (11) to 3:00 PM (15)
+    // } else if (currentHour >= 18 && currentHour < 20) {
     //   mealType = "snacks";
+    //   //? Snacks → 6:00 PM (18) to 8:00 PM (20)
     // } else {
     //   mealType = "beverages";
+    //   //? Beverages → All other times
     // }
-    mealType = "dinner";
+
+    mealType = "breakfast";
 
     console.log(`Current hour: ${currentHour}, Serving: ${mealType}`);
 
@@ -115,6 +124,7 @@ export const updateFoodItem = async (id: number, data: any) => {
 
 // Delete a food item by ID
 export const deleteFoodItem = async (id: number) => {
+  console.log("Deleting food item with ID:", id);
   const foodItem = await FoodItem.findByPk(id);
   if (!foodItem) return null;
   await foodItem.destroy();

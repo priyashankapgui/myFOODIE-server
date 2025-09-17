@@ -8,5 +8,6 @@ export interface FoodItemAttributes {
   hospitalprice: number;
   category: string;
   imageUrl?: string;
+  dietType?: string;
   available: boolean;
 }
