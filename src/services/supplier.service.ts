@@ -2,11 +2,13 @@ import Supplier from "../models/supplier";
 import User from "../models/user";
 import bcrypt from "bcryptjs";
 
+// Create a new supplier
 export const createSupplier = async (data: any) => {
   console.log("Creating supplier with data:", data);
   return await Supplier.create(data);
 };
 
+// Get all suppliers with user details
 export const getAllSuppliers = async () => {
   const suppliers = await Supplier.findAll({
     include: [
@@ -27,6 +29,7 @@ export const getAllSuppliers = async () => {
   }));
 };
 
+// Get a supplier by ID with user details
 export const getSupplierById = async (id: string) => {
   const supplier: any = await Supplier.findByPk(id, {
     include: [
@@ -49,6 +52,7 @@ export const getSupplierById = async (id: string) => {
   };
 };
 
+// Update a supplier by ID
 export const updateSupplier = async (id: string, data: any) => {
   const transaction = await Supplier.sequelize?.transaction();
 
@@ -104,6 +108,7 @@ export const updateSupplier = async (id: string, data: any) => {
   }
 };
 
+// Delete a supplier by ID
 export const deleteSupplier = async (id: string) => {
   const transaction = await Supplier.sequelize?.transaction();
 

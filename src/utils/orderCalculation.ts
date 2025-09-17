@@ -34,6 +34,7 @@ export const calculateOrderTotals = async (
 //? totalOrderHospitalPrice is the sum of the hospital prices of all food items in the order (hospital wants to pay)
 //? totalRequestOrderItems is the total quantity of all food items in the order (user wants to order)
 
+// Calculate received quantity for an order item
 export const calculateReceivedQuantity = async (
   orderItem: OrderItem
 ): Promise<number> => {

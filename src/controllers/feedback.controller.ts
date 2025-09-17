@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import * as feedbackService from "../services/feedback.service";
 
+// Create Feedback
 export const create = async (req: Request, res: Response) => {
   try {
     const feedback = await feedbackService.createFeedback(req.body);
@@ -10,6 +11,7 @@ export const create = async (req: Request, res: Response) => {
   }
 };
 
+// Get All Feedbacks
 export const getAll = async (_req: Request, res: Response) => {
   try {
     const feedbacks = await feedbackService.getAllFeedbacks();
@@ -19,6 +21,7 @@ export const getAll = async (_req: Request, res: Response) => {
   }
 };
 
+// Get Feedbacks by Supplier ID
 export const getBySupplierId = async (req: Request, res: Response) => {
   try {
     const supplierId = req.params.supplierId;
@@ -33,6 +36,7 @@ export const getBySupplierId = async (req: Request, res: Response) => {
   }
 };
 
+// Get Feedback by ID
 export const getById = async (req: Request, res: Response): Promise<void> => {
   try {
     const feedback = await feedbackService.getFeedbackById(req.params.id);

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import * as ManagementEmployeeService from "../services/management-employee.service";
 
+// Create Management Employee
 export const create = async (req: Request, res: Response) => {
   try {
     const Managementemployee = await ManagementEmployeeService.createMgmtEmp(
@@ -14,6 +15,7 @@ export const create = async (req: Request, res: Response) => {
   }
 };
 
+// Get All Management Employees
 export const getAll = async (_req: Request, res: Response) => {
   try {
     const Managementemployees =
@@ -26,6 +28,7 @@ export const getAll = async (_req: Request, res: Response) => {
   }
 };
 
+// Get Management Employee by ID
 export const getById = async (req: Request, res: Response): Promise<void> => {
   const Managementemployee = await ManagementEmployeeService.getMgmtEmpById(
     req.params.id
@@ -37,6 +40,7 @@ export const getById = async (req: Request, res: Response): Promise<void> => {
   res.json(Managementemployee);
 };
 
+// Update Management Employee
 export const update = async (req: Request, res: Response): Promise<void> => {
   const Managementemployee = await ManagementEmployeeService.updateMgmtEmp(
     req.params.id,
@@ -49,6 +53,7 @@ export const update = async (req: Request, res: Response): Promise<void> => {
   res.json(Managementemployee);
 };
 
+// Delete Management Employee
 export const remove = async (req: Request, res: Response): Promise<void> => {
   const success = await ManagementEmployeeService.deleteMgmtEmp(req.params.id);
 

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import * as AuthService from "../services/auth.service";
 
-//* Signup
+// Signup
 export const signup = async (req: Request, res: Response) => {
   try {
     const user = await AuthService.signup(req.body);
@@ -11,7 +11,7 @@ export const signup = async (req: Request, res: Response) => {
   }
 };
 
-//* Login
+// Login
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
@@ -22,7 +22,7 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-//* Logout
+// Logout
 export const logout = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user.id;
@@ -33,7 +33,7 @@ export const logout = async (req: Request, res: Response) => {
   }
 };
 
-//* Get User by ID
+// Get User by ID
 export const getUserById = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user.id;
@@ -44,7 +44,7 @@ export const getUserById = async (req: Request, res: Response) => {
   }
 };
 
-//* Forgot Password (Send OTP)
+// Forgot Password (Send OTP)
 export const forgotPassword = async (req: Request, res: Response) => {
   try {
     const { email } = req.body;
@@ -55,7 +55,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
   }
 };
 
-//* Reset Password
+// Reset Password
 export const resetPassword = async (req: Request, res: Response) => {
   try {
     const { email, otp, newPassword } = req.body;
@@ -66,7 +66,7 @@ export const resetPassword = async (req: Request, res: Response) => {
   }
 };
 
-//* Update User by ID
+// Update User by ID
 export const updateUserById = async (req: Request, res: Response) => {
   try {
     console.log(req.body);

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import * as NomalEmployee from "../services/nomal-employee.service";
 
+// Create Normal Employee
 export const create = async (req: Request, res: Response) => {
   try {
     const normalEmployee = await NomalEmployee.createNomalEmp(req.body);
@@ -10,6 +11,7 @@ export const create = async (req: Request, res: Response) => {
   }
 };
 
+// Get All Normal Employees
 export const getAll = async (_req: Request, res: Response) => {
   try {
     const normalEmployees = await NomalEmployee.getAllNomalEmps();
@@ -19,6 +21,7 @@ export const getAll = async (_req: Request, res: Response) => {
   }
 };
 
+// Get Normal Employee by ID
 export const getById = async (req: Request, res: Response): Promise<void> => {
   const normalEmployee = await NomalEmployee.getNomalEmpById(req.params.id);
   if (!normalEmployee) {
@@ -28,6 +31,7 @@ export const getById = async (req: Request, res: Response): Promise<void> => {
   res.json(normalEmployee);
 };
 
+// Update Normal Employee
 export const update = async (req: Request, res: Response): Promise<void> => {
   const normalEmployee = await NomalEmployee.updateNomalEmp(
     req.params.id,
@@ -40,6 +44,7 @@ export const update = async (req: Request, res: Response): Promise<void> => {
   res.json(normalEmployee);
 };
 
+// Delete Normal Employee
 export const remove = async (req: Request, res: Response): Promise<void> => {
   const success = await NomalEmployee.deleteNomalEmp(req.params.id);
 

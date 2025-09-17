@@ -10,9 +10,8 @@ import { OrderSummary as OrderSummaryType } from "../types/orderSummary";
 import Order from "../models/order";
 import { Op } from "sequelize";
 
-/**
- * Get all order summaries for a supplier
- */
+
+//Get all order summaries for a supplier
 export const getOrderSummariesBySupplier = async (
   supplierId: string
 ): Promise<OrderSummaryType[]> => {
@@ -22,9 +21,8 @@ export const getOrderSummariesBySupplier = async (
   });
 };
 
-/**
- * Get order summary for a specific month
- */
+
+// Get order summary for a specific month
 export const getMonthlyOrderSummary = async (
   supplierId: string,
   year: number,
@@ -33,9 +31,7 @@ export const getMonthlyOrderSummary = async (
   return await getOrCreateMonthlySummary(supplierId, year, month);
 };
 
-/**
- * Get yearly summary for a supplier
- */
+// Get yearly summary for a supplier
 export const getYearlyOrderSummary = async (
   supplierId: string,
   year: number
@@ -46,9 +42,7 @@ export const getYearlyOrderSummary = async (
   return await getSummaryForPeriodUtil(supplierId, startDate, endDate);
 };
 
-/**
- * Get quarterly summary for a supplier
- */
+// Get quarterly summary for a supplier
 export const getQuarterlyOrderSummary = async (
   supplierId: string,
   year: number,
@@ -63,9 +57,7 @@ export const getQuarterlyOrderSummary = async (
   return await getSummaryForPeriodUtil(supplierId, startDate, endDate);
 };
 
-/**
- * Force recalculation of a monthly summary
- */
+// Force recalculation of a monthly summary
 export const recalculateMonthlySummary = async (
   supplierId: string,
   year: number,
@@ -112,9 +104,7 @@ export const recalculateMonthlySummary = async (
   }
 };
 
-/**
- * Delete order summary by ID
- */
+// Delete order summary by ID
 export const deleteOrderSummary = async (id: number): Promise<boolean> => {
   const summary = await OrderSummary.findByPk(id);
   if (!summary) {
@@ -125,9 +115,7 @@ export const deleteOrderSummary = async (id: number): Promise<boolean> => {
   return true;
 };
 
-/**
- * Get all order summaries with pagination
- */
+// Get all order summaries with pagination
 export const getAllOrderSummaries = async (
   page: number = 1,
   limit: number = 10
@@ -146,9 +134,7 @@ export const getAllOrderSummaries = async (
   };
 };
 
-/**
- * Get summary for a specific time period
- */
+// Get summary for a specific time period
 export const getSummaryForPeriod = async (
   supplierId: string,
   startDate: Date,
@@ -157,9 +143,7 @@ export const getSummaryForPeriod = async (
   return await getSummaryForPeriodUtil(supplierId, startDate, endDate);
 };
 
-/**
- * Update monthly summary when an order is updated
- */
+// Update monthly summary when an order is updated
 export const updateMonthlySummary = async (
   supplierId: string,
   orderDate: Date

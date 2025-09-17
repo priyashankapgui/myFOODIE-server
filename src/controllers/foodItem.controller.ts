@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import * as foodItemService from "../services/foodItem.service";
 
+// Create Food Item
 export const create = async (req: Request, res: Response) => {
   try {
     const foodItem = await foodItemService.createFoodItem(req.body);
@@ -10,6 +11,7 @@ export const create = async (req: Request, res: Response) => {
   }
 };
 
+// Get Food items by Supplier ID
 export const getBySupplierId = async (
   req: Request,
   res: Response
@@ -24,6 +26,7 @@ export const getBySupplierId = async (
   }
 };
 
+// Get All Food items
 export const getAll = async (_req: Request, res: Response) => {
   try {
     const foodItems = await foodItemService.getAllFoodItems();
@@ -46,6 +49,7 @@ export const getTodaySpecial = async (req: Request, res: Response) => {
 //* Check the availability of food items based on meal type and time
 //* First I will get the current hour and determine the meal type
 //* Next I will fetch the available food items based on the meal type
+
 
 // Get Food item by ID
 export const getSingleFoodItem = async (
