@@ -75,8 +75,8 @@ export const calculateTobePaidValues = async (
 
 // Validate status transitions
 //? This function checks if a status transition is allowed based on the current and new status.
-//? pending -> prepared, cancelled
-//? prepared -> completed, non-completed, cancelled
+//? pending -> prepared
+//? prepared -> completed, non-completed
 //? prepared -> collected
 //? collected -> completed,non-completed
 //? completed -> (no further transitions)
